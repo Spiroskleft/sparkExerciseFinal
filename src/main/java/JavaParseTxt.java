@@ -13,7 +13,7 @@ public class JavaParseTxt {
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        Map<String, String> tableMap = new HashMap<>();
+
 
 
         //Είναι το αρχείο το οποίο θέλεμε να εξετάσουμε
@@ -45,11 +45,15 @@ public class JavaParseTxt {
         System.out.println(list.size());
 
 //        List<String> gasList = // create list with duplicates...
+        //Βάζω τα table name σε ένα Set για να κόψω τα διπλότυπα
         Set<String> tableSet = new HashSet<String>(tableList);
         System.out.println("tableSet count: " + tableSet.size());
 
         //Φτιάχνω και ενα map το οποίο θα ειναι to dictionary για να μπορώ να κάνω τα αρχεία με νούμερα
         Map<String,Integer> dictionary = new HashMap<>();
+
+        //Ειναι τα map για να ελέγχω τί έχω γράψει
+        Map<String, String> tableMap = new HashMap<>();
 
         //Γεμίζω το MAP
         List<String> t = new ArrayList<>(tableSet);
