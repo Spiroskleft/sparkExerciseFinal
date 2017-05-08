@@ -72,7 +72,7 @@ public class JavaParseTxt {
             //Αν στο map το όνομα του αρχείο ειναι κενο
             if (tableMap.get(list.get(i).getTable()) ==null) {
                 //fileName = t.get(i).toString();
-
+                System.out.println("");
                 //Βάζω σαν όνομα του αρχείου απο το Dictionary
                 fileName = String.valueOf((dictionary.get(list.get(i).getTable())));
 
@@ -122,5 +122,6 @@ public class JavaParseTxt {
         }
 
         }
+
 
 }
