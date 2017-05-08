@@ -15,17 +15,27 @@ import java.io.OutputStream;
 /**
  * Created by Spiroskleft@gmail.com on 8/5/2017.
  */
+
+// Σκοπός αυτής της κλάσης είναι η μετατροπή οποιουδήποτε αρχείου από το local file system σε αρχείο HDFS
+
+    // Για να το τρέξουμε αρκεί να δώσουμε δύο παραμέτρους: arg[0] : Το αρχείο του local file system
+    //                                                      arg[1] : Το αρχείο που επιθυμούμε να δημιουργηθεί στο HDFS
+
 public class HdfsReader {
 
 
         public static void main(String[] args) throws IOException {
+
+            // Ορίζουμε το αρχείο στο local file system
             String uri = args[0];
             InputStream in = null;
             Path pt = new Path(uri);
+            // Ορίζουμε το conf των αρχείων Hdfs
             Configuration myConf = new Configuration();
             Path outputPath = new Path(args[1]);
-
+            // Ορίζουμε το path του hdfs
             myConf.set("fs.defaultFS","hdfs://localhost:9000");
+            // Δημιουργία του output (του αρχείου Hdfs)
             FileSystem fSystem = FileSystem.get(URI.create(uri),myConf);
             OutputStream os = fSystem.create(outputPath);
             try{
