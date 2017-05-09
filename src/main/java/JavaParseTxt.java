@@ -1,6 +1,9 @@
 import Model.DataType;
 import org.semanticweb.yars.nx.Node;
 import org.semanticweb.yars.nx.parser.NxParser;
+import org.supercsv.io.CsvListWriter;
+import org.supercsv.io.ICsvListWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import java.io.*;
 import java.util.*;
@@ -11,14 +14,15 @@ import java.util.*;
 public class JavaParseTxt {
 
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws Exception {
 
 
 
 
         //Είναι το αρχείο το οποίο θέλεμε να εξετάσουμε
 //        FileInputStream is = new FileInputStream("/home/tsotzo/Desktop/RDF/police.nt");
-        FileInputStream is = new FileInputStream("/home/tsotzo/Desktop/RDF/Geochronology_DivisionList.nt");
+//        FileInputStream is = new FileInputStream("/home/tsotzo/Desktop/RDF/Geochronology_DivisionList.nt");
+        FileInputStream is = new FileInputStream("C:\\Users\\tsotz\\Desktop\\temp\\temp\\Geochronology_DivisionList.nt");
 
         //Χρησιμοποιούμε έναν κατάλληλο Parser
         //https://github.com/nxparser/nxparser
@@ -50,7 +54,7 @@ public class JavaParseTxt {
         System.out.println("tableSet count: " + tableSet.size());
 
         //Φτιάχνω και ενα map το οποίο θα ειναι to dictionary για να μπορώ να κάνω τα αρχεία με νούμερα
-        Map<String,Integer> dictionary = new HashMap<>();
+        Map<String,Integer> dictionaryMap = new HashMap<>();
 
         //Ειναι τα map για να ελέγχω τί έχω γράψει
         Map<String, String> tableMap = new HashMap<>();
@@ -59,7 +63,7 @@ public class JavaParseTxt {
         List<String> t = new ArrayList<>(tableSet);
         for (int i = 0; i < tableSet.size(); i++) {
             tableMap.put(t.get(i), null);
-            dictionary.put(t.get(i),i);
+            dictionaryMap.put(t.get(i),i);
         }
         System.out.println(tableMap.size());
 
@@ -76,14 +80,14 @@ public class JavaParseTxt {
             //Αν στο map το όνομα του αρχείο ειναι κενο
             if (tableMap.get(list.get(i).getTable()) ==null) {
                 //fileName = t.get(i).toString();
-                System.out.println("");
-                //Βάζω σαν όνομα του αρχείου απο το Dictionary
-                fileName = String.valueOf((dictionary.get(list.get(i).getTable())));
 
-                //Ενγμερώνω το tableMap
+                //Βάζω σαν όνομα του αρχείου απο το Dictionary
+                fileName = String.valueOf((dictionaryMap.get(list.get(i).getTable())));
+
+                //Ενημερώνω το tableMap
                 tableMap.put(list.get(i).getTable(),fileName);
             }else {
-                fileName = String.valueOf((dictionary.get(list.get(i).getTable())));
+                fileName = String.valueOf((dictionaryMap.get(list.get(i).getTable())));
             }
 
 
@@ -91,8 +95,11 @@ public class JavaParseTxt {
                 String content = list.get(i).getSubject() + "," + list.get(i).getObject()+"\n";
 //            FileOutputStream fop;
             FileOutputStream fop = null;
+
+
                 try{
-                    File file = new File("/home/tsotzo/Desktop/RDF/temp/"+fileName+".csv");
+//                    File file = new File("/home/tsotzo/Desktop/RDF/temp/"+fileName+".csv");
+                    File file = new File("C:\\Users\\tsotz\\Desktop\\temp\\temp\\RDD\\"+fileName+".csv");
                     fop = new FileOutputStream(file,true);
                     // if file doesn't exists, then create it
                     if (!file.exists()) {
@@ -111,6 +118,7 @@ public class JavaParseTxt {
                     }
 
 
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
@@ -125,7 +133,34 @@ public class JavaParseTxt {
                 }
         }
 
+
+
+        writeHashMapToCsv(dictionaryMap);
+
         }
 
+
+    /**
+     * Μετατρέπει Ένα Map σε ένα csv
+     * @param map
+     * @throws Exception
+     */
+    public static void writeHashMapToCsv( Map<String,Integer> map) throws Exception {
+//        Map<String,Integer> map = new HashMap<>();
+//        map.put("abc", "aabbcc");
+//        map.put("def", "ddeeff");
+
+        StringWriter output = new StringWriter();
+        try (ICsvListWriter listWriter = new CsvListWriter(output,
+                CsvPreference.STANDARD_PREFERENCE)){
+            for (Map.Entry<String, Integer> entry : map.entrySet()){
+                listWriter.write( entry.getValue(),entry.getKey());
+
+                StringBuilder t =
+            }
+        }
+
+        System.out.println(output);
+    }
 
 }

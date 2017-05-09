@@ -160,5 +160,6 @@
     <orderEntry type="library" name="Maven: org.semanticweb.yars:nxparser-api:2.3.3" level="project" />
     <orderEntry type="library" name="Maven: org.semanticweb.yars:nxparser-model:2.3.3" level="project" />
     <orderEntry type="library" name="Maven: org.semanticweb.yars:nxparser-commons:2.3.3" level="project" />
+    <orderEntry type="library" name="Maven: net.sf.supercsv:super-csv:2.4.0" level="project" />
   </component>
 </module>
