@@ -18,7 +18,7 @@ import java.io.OutputStream;
  */
 
 
-public class HdfsReader {
+public class HdfsWriter {
 
         public static void main(String[] args) throws IOException {
 
