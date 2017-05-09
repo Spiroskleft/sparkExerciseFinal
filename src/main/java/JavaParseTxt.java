@@ -32,13 +32,6 @@ public class JavaParseTxt {
         dictionaryFileName = prop.getProperty("dictionaryFileName");
         filesTypes = prop.getProperty("filesTypes");
 
-        System.out.println(dataset);
-        System.out.println(outputPath);
-        System.out.println(dictionaryFileName);
-        System.out.println(filesTypes);
-
-
-
         //Είναι το αρχείο το οποίο θέλεμε να εξετάσουμε
         FileInputStream is = new FileInputStream(dataset);
 
