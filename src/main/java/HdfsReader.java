@@ -12,15 +12,13 @@ import java.io.OutputStream;
 
 /**
  * Created by Spiroskleft@gmail.com on 8/5/2017.
+ * Σκοπός αυτής της κλάσης είναι η μετατροπή οποιουδήποτε αρχείου από το local file system σε αρχείο HDFS
+ * Για να το τρέξουμε αρκεί να δώσουμε δύο παραμέτρους: arg[0] : Το αρχείο του local file system
+ *                                                      arg[1] : Το αρχείο που επιθυμούμε να δημιουργηθεί στο HDFS
  */
 
-// Σκοπός αυτής της κλάσης είναι η μετατροπή οποιουδήποτε αρχείου από το local file system σε αρχείο HDFS
-
-    // Για να το τρέξουμε αρκεί να δώσουμε δύο παραμέτρους: arg[0] : Το αρχείο του local file system
-    //                                                      arg[1] : Το αρχείο που επιθυμούμε να δημιουργηθεί στο HDFS
 
 public class HdfsReader {
-
 
         public static void main(String[] args) throws IOException {
 
