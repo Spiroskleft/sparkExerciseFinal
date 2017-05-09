@@ -20,15 +20,20 @@ import java.io.OutputStream;
 
 public class HdfsWriter {
 
-        public static void main(String[] args) throws IOException {
+    public HdfsWriter(){
+
+    }
+
+        public static void writeToHDFS (String inputHDFSpath, String outputHDFSpath)throws IOException {
+
 
             // Ορίζουμε το αρχείο στο local file system
-            String uri = args[0];
+            String uri = inputHDFSpath;
             InputStream in = null;
             Path pt = new Path(uri);
             // Ορίζουμε το conf των αρχείων Hdfs
             Configuration myConf = new Configuration();
-            Path outputPath = new Path(args[1]);
+            Path outputPath = new Path(outputHDFSpath);
             // Ορίζουμε το path του hdfs
             myConf.set("fs.defaultFS","hdfs://localhost:9000");
             // Δημιουργία του output (του αρχείου Hdfs)

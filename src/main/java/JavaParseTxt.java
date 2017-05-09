@@ -14,7 +14,13 @@ public class JavaParseTxt {
     private  static String dataset = "";
     private  static String outputPath = "";
     private  static String dictionaryFileName = "";
+    private  static Boolean writeDataToHDFS = false;
+
+    //Για το HDFS
+    private static String inputHDFSpath = "";
+    private static String outputHDFSpath = "";
     private  static String filesTypes = "";
+
 
     public static void main(String[] args) throws Exception {
 
@@ -31,6 +37,11 @@ public class JavaParseTxt {
         outputPath = prop.getProperty("outputPath");
         dictionaryFileName = prop.getProperty("dictionaryFileName");
         filesTypes = prop.getProperty("filesTypes");
+
+
+        inputHDFSpath = prop.getProperty("inputHDFSpath");
+        outputHDFSpath = prop.getProperty("outputHDFSpath");
+        writeDataToHDFS = Boolean.valueOf(prop.getProperty("writeDataToHDFS"));
 
         //Είναι το αρχείο το οποίο θέλεμε να εξετάσουμε
         FileInputStream is = new FileInputStream(dataset);
@@ -74,7 +85,6 @@ public class JavaParseTxt {
             tableMap.put(t.get(i), null);
             dictionaryMap.put(t.get(i), i);
         }
-//        System.out.println(tableMap.size());
 
 
         //Διατρέχω την λίστα μου για να φτιάξω τα αρχεία.
@@ -84,7 +94,6 @@ public class JavaParseTxt {
 
         //Εδώ ειναι η list κανονικα
         for (int i = 0; i < list.size(); i++) {
-//            for (int i = 0; i < 50; i++) {
             String fileName = "";
             //Αν στο map το όνομα του αρχείο ειναι κενο
             if (tableMap.get(list.get(i).getTable()) == null) {
@@ -104,12 +113,16 @@ public class JavaParseTxt {
             writeInFile(outputPath, content, fileName, filesTypes);
 
         }
-
-
+        //Γράφουμε το Map που είναι το Dictionary σε αρχείο
         writeHashMapToCsv(dictionaryMap);
 
-
         System.out.println("Done");
+
+        //Άμα έχουμε επιλέξει να γράψουμε το αρχείο στο HDFS το αποθηκεύουμε
+        if(writeDataToHDFS) {
+            HdfsWriter.writeToHDFS(inputHDFSpath, outputHDFSpath);
+        }
+
     }
 
 
@@ -126,12 +139,10 @@ public class JavaParseTxt {
         StringWriter output = new StringWriter();
         try  {
             for (Map.Entry<String, Integer> entry : map.entrySet()) {
-//                listWriter.write( entry.getValue(),entry.getKey());
                 sb.append(entry.getValue().toString());
                 sb.append(",");
                 sb.append(entry.getKey().toString());
                 sb.append("\n");
-//                System.out.println(sb.toString());
             }
         } catch (Exception e ){
             e.printStackTrace();
@@ -185,10 +196,4 @@ public class JavaParseTxt {
             }
         }
     }
-
 }
-
-
-
-
-
