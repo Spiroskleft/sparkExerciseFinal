@@ -1,3 +1,5 @@
+package rdf;
+
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -13,10 +15,10 @@ import java.util.Properties;
  * ---------------------------------------------------------------------
  * <p>
  * Για να το τρέξεις
- * spark-submit --class spark.ExerciseRDF  sparkExerciseRDF-1.0-SNAPSHOT.jar
+ * spark-submit --class rdf.RDFReading  sparkExerciseFinal-1.0-SNAPSHOT.jar
  */
 
-public class ExerciseRDF {
+public class RDFReading {
     private static String inputFile;
     private static  String inputPath ;
     private static String outputDirectory;
@@ -26,7 +28,7 @@ public class ExerciseRDF {
 
         Properties prop = new Properties();
         InputStream input = null;
-        input = JavaParseTxt.class.getClassLoader().getResourceAsStream("config.properties");
+        input = RDFReading.class.getClassLoader().getResourceAsStream("config.properties");
 
         // load a properties file
         prop.load(input);

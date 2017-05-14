@@ -1,4 +1,4 @@
-import Model.DataType;
+import model.DataType;
 import org.semanticweb.yars.nx.Node;
 import org.semanticweb.yars.nx.parser.NxParser;
 
