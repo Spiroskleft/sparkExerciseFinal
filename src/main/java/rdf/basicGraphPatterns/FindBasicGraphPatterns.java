@@ -15,7 +15,6 @@ import java.io.IOException;
 public class FindBasicGraphPatterns {
 
 
-
 /**
  * Working with triples (s,p,o)
  * when triples in verticalPartitioning (VP)
@@ -72,9 +71,4 @@ public static void findSubject(String object,String predicate,SparkSession spark
                 sparkSession.sql("SELECT _c0 as subject , _c1 as object " +
                         "FROM tableName ").show();
         }
-
-
-
-
-
 }
