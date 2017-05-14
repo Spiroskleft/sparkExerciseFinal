@@ -85,4 +85,24 @@ public class RDFReading {
                 "where _c1='"+object+"'").show();
     }
 
+
+    /**
+     * Working with triples (s,p,o)
+     * when triples in verticalPartitioning (VP)
+     * ?s p1 ?o
+     * @param predicate
+     */
+    public static void findSubject( String predicate,SparkSession sparkSession){
+        //The predicate will tell us the file that we must take
+        //Φορτώνουμε το αρχειο σε ένα Dataset
+        Dataset<Row> df = sparkSession.read().csv(inputPath+predicate+".csv");
+
+        df.createOrReplaceTempView("tableName");
+        //Κάνουμε προβολή των δεδομένων
+        sparkSession.sql("SELECT _c0 as subject , _c1 as object " +
+                "FROM tableName ").show();
+    }
+
+
+
 }
