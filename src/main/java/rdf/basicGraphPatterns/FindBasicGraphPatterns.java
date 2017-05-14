@@ -1,12 +1,12 @@
 package rdf.basicGraphPatterns;
 
-import javafx.beans.property.ReadOnlyProperty;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import rdf.RDFReading;
 //
 import utils.ReadPropertiesFile;
+
+import java.io.IOException;
 //import utils.ReadPropertiesFile.inputPath;
 
 /**
@@ -44,10 +44,10 @@ public static void findSubject(String object,String predicate,SparkSession spark
          * @param subject
          * @param predicate
          */
-        public static void findObject(String subject, String predicate,SparkSession sparkSession){
+        public static void findObject(String subject, String predicate,SparkSession sparkSession) throws IOException {
                 //The predicate will tell us the file that we must take
                 //Φορτώνουμε το αρχειο σε ένα Dataset
-                Dataset<Row> df = sparkSession.read().csv(ReadPropertiesFile.inputPath+predicate+".csv");
+                Dataset<Row> df = sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath()+predicate+".csv");
 
                 df.createOrReplaceTempView("tableName");
                 //Κάνουμε προβολή των δεδομένων

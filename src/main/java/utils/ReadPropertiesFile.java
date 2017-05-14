@@ -1,5 +1,6 @@
 package utils;
 
+import org.apache.hadoop.hdfs.protocol.DirectoryListing;
 import rdf.RDFReading;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.util.Properties;
 public class ReadPropertiesFile {
     public static  String inputPath ;
 
-    public static void readFile() throws IOException {
+    public static String readRDFDataInputPath() throws IOException {
     Properties prop = new Properties();
     InputStream input = null;
         try {
@@ -20,11 +21,11 @@ public class ReadPropertiesFile {
             prop.load(input);
             //Getting the setting from the property file
             inputPath = prop.getProperty("RDFDataInputPath");
-            System.out.println("---------------InputPath------------->"+inputPath);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return inputPath;
     }
 
 }
