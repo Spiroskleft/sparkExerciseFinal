@@ -10,6 +10,8 @@ import utils.ReadPropertiesFile;
  * Created by tsotzo on 15/5/2017.
  */
 public class RdfJoins {
+    //Πέρνουμε το path που είναι ο φάκελος των δεδομένων απο το properties file
+    private final static  String  INPUT_PATH = ReadPropertiesFile.inputPath;
 
 
     /**
@@ -55,8 +57,8 @@ public class RdfJoins {
     public static void findObjectObjectJoin( String predicate1,String predicate2,String subject1,String subject2,SparkSession sparkSession) throws AnalysisException {
         //The predicate will tell us the file that we must take
         //Φορτώνουμε το αρχειο σε ένα Dataset
-        Dataset<Row> df1 = sparkSession.read().csv(ReadPropertiesFile.inputPath + predicate1 + ".csv");
-        Dataset<Row> df2 = sparkSession.read().csv(ReadPropertiesFile.inputPath + predicate2 + ".csv");
+        Dataset<Row> df1 = sparkSession.read().csv(INPUT_PATH + predicate1 + ".csv");
+        Dataset<Row> df2 = sparkSession.read().csv(INPUT_PATH + predicate2 + ".csv");
 
         df1.createOrReplaceTempView("tableName1");
         df2.createOrReplaceTempView("tableName2");
