@@ -18,7 +18,12 @@ public class RdfJoins {
      * Working with triples (s,p,o)
      * when triples in verticalPartitioning (VP)
      * ?s p1 o1
-     *
+     * ?s p2 o2
+     * Και στο παράδειγμα των follows και likes
+     * p1->folloes
+     * p2->likes
+     * Ποιος follows τον ο1
+     * και του likes τον ο2
      * @param object1
      * @param object2
      * @param predicate1
@@ -48,7 +53,7 @@ public class RdfJoins {
      * s1 p1 ?o
      * s2 p1 ?o
      * Απαντά στο ερώτημα πχ με τους follows
-     * Ποιον ακολουθά ταυτόχρονα και ο s1 και ο s2 ?
+     * Ποιους ακολουθά ταυτόχρονα και ο s1 και ο s2 ?
      * @param subject1
      * @param subject2
      * @param predicate1
