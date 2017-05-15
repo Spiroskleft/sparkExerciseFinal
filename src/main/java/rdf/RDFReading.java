@@ -7,6 +7,7 @@ import org.apache.spark.sql.SparkSession;
 import java.io.IOException;
 
 import rdf.basicGraphPatterns.*;
+import rdf.joins.RdfJoins;
 
 /**
  * Created by tsotzolas on 02/05/2017.
@@ -40,6 +41,10 @@ public class RDFReading {
 
         //?s p1 ?o
         FindBasicGraphPatterns.findSubjectObject("0",sparkSession);
+
+//        RdfJoins.findSubjectSubjectJoin("follows","likes","a","b",sparkSession);
+
+        RdfJoins.findObjectObjectJoin("follows","likes","a","b",sparkSession);
 
 
 
