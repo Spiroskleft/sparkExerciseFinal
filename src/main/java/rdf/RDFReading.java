@@ -1,5 +1,6 @@
 package rdf;
 
+import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -25,7 +26,7 @@ public class RDFReading {
     private static String outputDirectory;
     private static SparkSession sparkSession;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, AnalysisException {
         //TODO να αλλάζουμε να διαβάζει απο το HDFS
 
 
@@ -42,9 +43,9 @@ public class RDFReading {
         //?s p1 ?o
         FindBasicGraphPatterns.findSubjectObject("0",sparkSession);
 
-//        RdfJoins.findSubjectSubjectJoin("follows","likes","a","b",sparkSession);
+        RdfJoins.findSubjectSubjectJoin("follows","likes","b","i1",sparkSession);
 
-        RdfJoins.findObjectObjectJoin("follows","likes","a","b",sparkSession);
+        RdfJoins.findObjectObjectJoin("follows","follows","a","c",sparkSession);
 
 
 

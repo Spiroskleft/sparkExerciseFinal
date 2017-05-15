@@ -1,5 +1,6 @@
 package rdf.joins;
 
+import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -31,24 +32,27 @@ public class RdfJoins {
         df2.createOrReplaceTempView("tableName2");
         //Κάνουμε προβολή των δεδομένων
         System.out.println("-------------------SubjectSubject----------------------------");
-        sparkSession.sql("SELECT _c0 as subject1, _c1 as subject2" +
+        sparkSession.sql("SELECT tableName1._c0 as subject1, tableName1._c1 as subject2" +
                 " FROM tableName1, tableName2 " +
                 " where tableName1._c0='" + object1 + "' AND tableName2._c0='" + object2 +"'"+
-                " AND tableName1.subject1 = tableName2.subject2").show();
+                " AND tableName1._c0 = tableName2._c0").show();
     }
 
 
     /**
      * Working with triples (s,p,o)
      * when triples in verticalPartitioning (VP)
-     * ?s p1 o1
-     *
+     * Join object-object (OO)
+     * s1 p1 ?o
+     * s2 p1 ?o
+     * Απαντά στο ερώτημα πχ με τους follows
+     * Ποιον ακολουθά ταυτόχρονα και ο s1 και ο s2 ?
      * @param subject1
      * @param subject2
      * @param predicate1
      * @param predicate2
      */
-    public static void findObjectObjectJoin( String predicate1,String predicate2,String subject1,String subject2,SparkSession sparkSession) {
+    public static void findObjectObjectJoin( String predicate1,String predicate2,String subject1,String subject2,SparkSession sparkSession) throws AnalysisException {
         //The predicate will tell us the file that we must take
         //Φορτώνουμε το αρχειο σε ένα Dataset
         Dataset<Row> df1 = sparkSession.read().csv(ReadPropertiesFile.inputPath + predicate1 + ".csv");
@@ -60,16 +64,11 @@ public class RdfJoins {
 
 
         System.out.println("-------------------ObjectObject----------------------------");
-        sparkSession.sql("SELECT _c0 as subject, _c1 as object " +
+        sparkSession.sql("SELECT tableName1._c1 as object1" +
                 " FROM tableName1 , tableName2 " +
-                " where tableName1._c1='" + subject1 + "'"+
+                " where tableName1._c0='" + subject1 + "'"+
                 " and tableName1._c1=tableName2._c1"+
                 " and tableName2._c0='" + subject2 + "'").show();
-
-
-
-
-
 
     }
 
