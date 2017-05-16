@@ -11,11 +11,11 @@ import java.util.Properties;
  * Created by tsotzo on 14/5/2017.
  */
 public class ReadPropertiesFile {
-    private static  String inputPath ;
 
     public static String readRDFDataInputPath() throws IOException {
     Properties prop = new Properties();
     InputStream input = null;
+    String inputPath = "";
         try {
             input = RDFReading.class.getClassLoader().getResourceAsStream("config.properties");
             prop.load(input);
@@ -27,5 +27,23 @@ public class ReadPropertiesFile {
 
         return inputPath;
     }
+
+
+    public static String readHDFSDataInputPath() throws IOException {
+        Properties prop = new Properties();
+        InputStream input = null;
+        String inputPath = "";
+        try {
+            input = RDFReading.class.getClassLoader().getResourceAsStream("config.properties");
+            prop.load(input);
+            //Getting the setting from the property file
+            inputPath = prop.getProperty("HDFSDataPath").toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return inputPath;
+    }
+
 
 }

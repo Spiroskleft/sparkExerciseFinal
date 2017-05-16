@@ -27,23 +27,20 @@ public class RDFReading {
     private static SparkSession sparkSession;
 
     public static void main(String[] args) throws IOException, AnalysisException {
-        //TODO να αλλάζουμε να διαβάζει απο το HDFS
+
 
 
         //Create the Spark session
         sparkSession = SparkSession.builder().master("local").appName("RDFreader").getOrCreate();
 
-
         //s1 p1 ?o
         FindBasicGraphPatterns.findObject("<http://data.bgs.ac.uk/id/Geochronology/DivisionList/CAA>","0",sparkSession);
 
         //?s p1 o1
-//        FindBasicGraphPatterns.findSubject("<http://www.w3.org/2004/02/skos/core#OrderedCollection>","0",sparkSession);
+        FindBasicGraphPatterns.findSubject("<http://www.w3.org/2004/02/skos/core#OrderedCollection>","0",sparkSession);
 
         //?s p1 ?o
         FindBasicGraphPatterns.findSubjectObject("0",sparkSession);
-
-
 
         /***********************Joins***************/
 
@@ -68,65 +65,6 @@ public class RDFReading {
         //s1 p1 ?o
         //Πρέπει να βγάλει c
         RdfJoins.findSubjectObjectJoin("likes","follows","i2","b",sparkSession);
-
     }
-
-
-//    /**
-//     * Working with triples (s,p,o)
-//     * when triples in verticalPartitioning (VP)
-//     * s1 p1 ?o
-//     * @param subject
-//     * @param predicate
-//     */
-//    public static void findObject(String subject, String predicate,SparkSession sparkSession){
-//        //The predicate will tell us the file that we must take
-//        //Φορτώνουμε το αρχειο σε ένα Dataset
-//        Dataset<Row> df = sparkSession.read().csv(inputPath+predicate+".csv");
-//
-//        df.createOrReplaceTempView("tableName");
-//        //Κάνουμε προβολή των δεδομένων
-//        sparkSession.sql("SELECT _c1 as object " +
-//                "FROM tableName " +
-//                "where _c0='"+subject+"'").show();
-//    }
-
-
-//    /**
-//     * Working with triples (s,p,o)
-//     * when triples in verticalPartitioning (VP)
-//     * ?s p1 o1
-//     * @param object
-//     * @param predicate
-//     */
-//    public static void findSubject(String object, String predicate,SparkSession sparkSession){
-//        //The predicate will tell us the file that we must take
-//        //Φορτώνουμε το αρχειο σε ένα Dataset
-//        Dataset<Row> df = sparkSession.read().csv(inputPath+predicate+".csv");
-//
-//        df.createOrReplaceTempView("tableName");
-//        //Κάνουμε προβολή των δεδομένων
-//        sparkSession.sql("SELECT _c0 as subject " +
-//                "FROM tableName " +
-//                "where _c1='"+object+"'").show();
-//    }
-
-
-//    /**
-//     * Working with triples (s,p,o)
-//     * when triples in verticalPartitioning (VP)
-//     * ?s p1 ?o
-//     * @param predicate
-//     */
-//    public static void findSubjectObject( String predicate,SparkSession sparkSession){
-//        //The predicate will tell us the file that we must take
-//        //Φορτώνουμε το αρχειο σε ένα Dataset
-//        Dataset<Row> df = sparkSession.read().csv(inputPath+predicate+".csv");
-//
-//        df.createOrReplaceTempView("tableName");
-//        //Κάνουμε προβολή των δεδομένων
-//        sparkSession.sql("SELECT _c0 as subject , _c1 as object " +
-//                "FROM tableName ").show();
-//    }
 
 }

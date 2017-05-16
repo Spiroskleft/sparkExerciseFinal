@@ -12,11 +12,6 @@ import java.io.IOException;
  * Created by tsotzo on 15/5/2017.
  */
 public class RdfJoins {
-    //Πέρνουμε το path που είναι ο φάκελος των δεδομένων απο το properties file
-//    private final static String ReadPropertiesFile.readRDFDataInputPath()1 = ReadPropertiesFile.readRDFDataInputPath();
-//    private final static String ReadPropertiesFile.readRDFDataInputPath() = "/usr/lib/spark/bin/RDF/temp/example/";
-
-
     /**
      * Working with triples (s,p,o)
      * when triples in verticalPartitioning (VP)
@@ -36,8 +31,8 @@ public class RdfJoins {
     public static void findSubjectSubjectJoin(String predicate1, String predicate2, String object1, String object2, SparkSession sparkSession) throws IOException {
         //The predicate will tell us the file that we must take
         //Φορτώνουμε το κάθε αρχείο σε ένα Dataset
-        Dataset<Row> df1 = sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath() + predicate1 + ".csv");
-        Dataset<Row> df2 = sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath() + predicate2 + ".csv");
+        Dataset<Row> df1 = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/"+ predicate1 + ".csv");
+        Dataset<Row> df2 = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/"+ predicate2 + ".csv");
 
         df1.createOrReplaceTempView("tableName1");
         df2.createOrReplaceTempView("tableName2");
@@ -69,8 +64,8 @@ public class RdfJoins {
     public static void findObjectObjectJoin(String predicate1, String predicate2, String subject1, String subject2, SparkSession sparkSession) throws AnalysisException, IOException {
         //The predicate will tell us the file that we must take
         //Φορτώνουμε το αρχειο σε ένα Dataset
-        Dataset<Row> dfa = sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath() + predicate1 + ".csv");
-        Dataset<Row> dfb = sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath() + predicate2 + ".csv");
+        Dataset<Row> dfa = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/"+ predicate1 + ".csv");
+        Dataset<Row> dfb = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/"+ predicate2 + ".csv");
 
         dfa.createOrReplaceTempView("tableName1");
         dfb.createOrReplaceTempView("tableName2");
@@ -106,8 +101,8 @@ public class RdfJoins {
     public static void findObjectSubjectJoin(String predicate1, String predicate2, String subject1, String object2, SparkSession sparkSession) throws AnalysisException, IOException {
         //The predicate will tell us the file that we must take
         //Φορτώνουμε το αρχειο σε ένα Dataset
-        Dataset<Row> df3 = sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath() + predicate1 + ".csv");
-        Dataset<Row> df4 = sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath() + predicate2 + ".csv");
+        Dataset<Row> df3 = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/"+ predicate1 + ".csv");
+        Dataset<Row> df4 = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/" + predicate2 + ".csv");
 
         df3.createOrReplaceTempView("tableName1");
         df4.createOrReplaceTempView("tableName2");
@@ -140,8 +135,9 @@ public class RdfJoins {
     public static void findSubjectObjectJoin(String predicate1, String predicate2,  String object1,String subject2, SparkSession sparkSession) throws AnalysisException, IOException {
         //The predicate will tell us the file that we must take
         //Φορτώνουμε το αρχειο σε ένα Dataset
-        Dataset<Row> df1 = sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath() + predicate1 + ".csv");
-        Dataset<Row> df2 = sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath() + predicate2 + ".csv");
+
+        Dataset<Row> df1 = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/" + predicate1 + ".csv");
+        Dataset<Row> df2 = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/" + predicate2 + ".csv");
 
         df1.createOrReplaceTempView("tableName1");
         df2.createOrReplaceTempView("tableName2");
@@ -155,14 +151,4 @@ public class RdfJoins {
                 " and tableName1._c1='" + object1 + "'" +
                 " and tableName2._c0='" + subject2 + "'").show();
     }
-
-
-
-
-
-
-
-
-
-
 }
