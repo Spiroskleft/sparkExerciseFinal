@@ -31,11 +31,11 @@ public class RdfJoins {
      */
     public static void findSubjectSubjectJoin(String predicate1, String predicate2, String object1, String object2, SparkSession sparkSession) {
         //The predicate will tell us the file that we must take
-        //Φορτώνουμε το αρχειο σε ένα Dataset
-        Dataset<Row> df = sparkSession.read().csv(ReadPropertiesFile.inputPath + predicate1 + ".csv");
-        Dataset<Row> df2 = sparkSession.read().csv(ReadPropertiesFile.inputPath + predicate2 + ".csv");
+        //Φορτώνουμε το κάθε αρχείο σε ένα Dataset
+        Dataset<Row> df1 = sparkSession.read().csv(INPUT_PATH + predicate1 + ".csv");
+        Dataset<Row> df2 = sparkSession.read().csv(INPUT_PATH + predicate2 + ".csv");
 
-        df.createOrReplaceTempView("tableName1");
+        df1.createOrReplaceTempView("tableName1");
         df2.createOrReplaceTempView("tableName2");
         //Κάνουμε προβολή των δεδομένων
         System.out.println("-------------------SubjectSubject----------------------------");
@@ -43,6 +43,11 @@ public class RdfJoins {
                 " FROM tableName1, tableName2 " +
                 " where tableName1._c0='" + object1 + "' AND tableName2._c0='" + object2 +"'"+
                 " AND tableName1._c0 = tableName2._c0").show();
+        sparkSession.sql("SELECT tableName1._c1 as subject1" +
+                " FROM tableName1 , tableName2 " +
+                " where tableName1._c0='" + object1 + "'"+
+                " and tableName1._c1=tableName2._c1"+
+                " and tableName2._c0='" + object2 + "'").show();
     }
 
 
@@ -76,6 +81,10 @@ public class RdfJoins {
                 " where tableName1._c0='" + subject1 + "'"+
                 " and tableName1._c1=tableName2._c1"+
                 " and tableName2._c0='" + subject2 + "'").show();
+
+        // Νομίζω εδώ χρειαζόμασε και την συνθήκη για τα p1 . Δηλαδή ότι predicate1=predicate2 αλλιώς το ερώτημα
+        // λογικά θα φέρει π.χ. και τα likes που κάνει ο s1 στον ο αλλά π.χ. και τα follows. Δηλαδή αυτό παραπάνω είναι
+        // νομίζω το (s1 p1 ?o) με (s1 p2 ?o)
 
     }
 
