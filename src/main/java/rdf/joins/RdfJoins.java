@@ -11,7 +11,7 @@ import utils.ReadPropertiesFile;
  */
 public class RdfJoins {
     //Πέρνουμε το path που είναι ο φάκελος των δεδομένων απο το properties file
-    private final static  String  INPUT_PATH = ReadPropertiesFile.inputPath;
+    private final static String INPUT_PATH = ReadPropertiesFile.inputPath;
 
 
     /**
@@ -24,6 +24,7 @@ public class RdfJoins {
      * p2->likes
      * Ποιος follows τον ο1
      * και του likes τον ο2
+     *
      * @param object1
      * @param object2
      * @param predicate1
@@ -39,14 +40,10 @@ public class RdfJoins {
         df2.createOrReplaceTempView("tableName2");
         //Κάνουμε προβολή των δεδομένων
         System.out.println("-------------------SubjectSubject----------------------------");
-        sparkSession.sql("SELECT tableName1._c0 as subject1, tableName1._c1 as subject2" +
-                " FROM tableName1, tableName2 " +
-                " where tableName1._c0='" + object1 + "' AND tableName2._c0='" + object2 +"'"+
-                " AND tableName1._c0 = tableName2._c0").show();
         sparkSession.sql("SELECT tableName1._c1 as subject1" +
                 " FROM tableName1 , tableName2 " +
-                " where tableName1._c0='" + object1 + "'"+
-                " and tableName1._c1=tableName2._c1"+
+                " where tableName1._c0='" + object1 + "'" +
+                " and tableName1._c1=tableName2._c1" +
                 " and tableName2._c0='" + object2 + "'").show();
     }
 
@@ -59,12 +56,13 @@ public class RdfJoins {
      * s2 p1 ?o
      * Απαντά στο ερώτημα πχ με τους follows
      * Ποιους ακολουθά ταυτόχρονα και ο s1 και ο s2 ?
+     *
      * @param subject1
      * @param subject2
      * @param predicate1
      * @param predicate2
      */
-    public static void findObjectObjectJoin( String predicate1,String predicate2,String subject1,String subject2,SparkSession sparkSession) throws AnalysisException {
+    public static void findObjectObjectJoin(String predicate1, String predicate2, String subject1, String subject2, SparkSession sparkSession) throws AnalysisException {
         //The predicate will tell us the file that we must take
         //Φορτώνουμε το αρχειο σε ένα Dataset
         Dataset<Row> df1 = sparkSession.read().csv(INPUT_PATH + predicate1 + ".csv");
@@ -78,8 +76,8 @@ public class RdfJoins {
         System.out.println("-------------------ObjectObject----------------------------");
         sparkSession.sql("SELECT tableName1._c1 as object1" +
                 " FROM tableName1 , tableName2 " +
-                " where tableName1._c0='" + subject1 + "'"+
-                " and tableName1._c1=tableName2._c1"+
+                " where tableName1._c0='" + subject1 + "'" +
+                " and tableName1._c1=tableName2._c1" +
                 " and tableName2._c0='" + subject2 + "'").show();
 
         // Νομίζω εδώ χρειαζόμασε και την συνθήκη για τα p1 . Δηλαδή ότι predicate1=predicate2 αλλιώς το ερώτημα
@@ -87,13 +85,6 @@ public class RdfJoins {
         // νομίζω το (s1 p1 ?o) με (s1 p2 ?o)
 
     }
-
-
-
-
-
-
-
 
 
 }
