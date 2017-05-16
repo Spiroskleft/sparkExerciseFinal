@@ -38,16 +38,36 @@ public class RDFReading {
         FindBasicGraphPatterns.findObject("<http://data.bgs.ac.uk/id/Geochronology/DivisionList/CAA>","0",sparkSession);
 
         //?s p1 o1
-        FindBasicGraphPatterns.findSubject("<http://www.w3.org/2004/02/skos/core#OrderedCollection>","0",sparkSession);
+//        FindBasicGraphPatterns.findSubject("<http://www.w3.org/2004/02/skos/core#OrderedCollection>","0",sparkSession);
 
         //?s p1 ?o
         FindBasicGraphPatterns.findSubjectObject("0",sparkSession);
 
+
+
+        /***********************Joins***************/
+
+        //?s p1 o1
+        //?s p2 o2
+        //Πρέπει να βγάλει a
         RdfJoins.findSubjectSubjectJoin("follows","likes","b","i1",sparkSession);
 
+
+        //s1 p1 ?o
+        //s2 p1 ?o
+        //Πρέπει να βγάλει a
         RdfJoins.findObjectObjectJoin("follows","follows","a","c",sparkSession);
 
+        //s1 p1 ?o
+        //?s p2 o2
+        //Πρέπει να βγάλει c
+        RdfJoins.findObjectSubjectJoin("follows","likes","b","i2",sparkSession);
 
+
+        //?s p2 o2
+        //s1 p1 ?o
+        //Πρέπει να βγάλει c
+        RdfJoins.findSubjectObjectJoin("likes","follows","i2","b",sparkSession);
 
     }
 

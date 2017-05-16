@@ -11,7 +11,7 @@ import java.util.Properties;
  * Created by tsotzo on 14/5/2017.
  */
 public class ReadPropertiesFile {
-    public static  String inputPath ;
+    private static  String inputPath ;
 
     public static String readRDFDataInputPath() throws IOException {
     Properties prop = new Properties();

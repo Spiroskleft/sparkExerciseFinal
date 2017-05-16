@@ -23,10 +23,10 @@ public class FindBasicGraphPatterns {
      * @param object
      * @param predicate
      */
-    public static void findSubject(String object, String predicate, SparkSession sparkSession) {
+    public static void findSubject(String object, String predicate, SparkSession sparkSession) throws IOException {
         //The predicate will tell us the file that we must take
         //Φορτώνουμε το αρχειο σε ένα Dataset
-        Dataset<Row> df = sparkSession.read().csv(ReadPropertiesFile.inputPath + predicate + ".csv");
+        Dataset<Row> df = sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath()+ predicate + ".csv");
 
         df.createOrReplaceTempView("tableName");
         //Κάνουμε προβολή των δεδομένων
@@ -63,10 +63,10 @@ public class FindBasicGraphPatterns {
      *
      * @param predicate
      */
-    public static void findSubjectObject(String predicate, SparkSession sparkSession) {
+    public static void findSubjectObject(String predicate, SparkSession sparkSession) throws IOException {
         //The predicate will tell us the file that we must take
         //Φορτώνουμε το αρχειο σε ένα Dataset
-        Dataset<Row> df = sparkSession.read().csv(ReadPropertiesFile.inputPath + predicate + ".csv");
+        Dataset<Row> df = sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath() + predicate + ".csv");
 
         df.createOrReplaceTempView("tableName");
         //Κάνουμε προβολή των δεδομένων
