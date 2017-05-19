@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import rdf.basicGraphPatterns.*;
 import rdf.joins.RdfJoins;
+import rdf.joins.RdfTesting;
 
 /**
  * Created by tsotzolas on 02/05/2017.
@@ -64,7 +65,10 @@ public class RDFReading {
         //?s p2 o2
         //s1 p1 ?o
         //Πρέπει να βγάλει c
-        RdfJoins.findSubjectObjectJoin("likes","follows","i2","b",sparkSession);
+//        RdfJoins.findSubjectObjectJoin("likes","follows","i2","b",sparkSession);
+
+
+        RdfTesting.testParquet("likes",sparkSession);
     }
 
 }
