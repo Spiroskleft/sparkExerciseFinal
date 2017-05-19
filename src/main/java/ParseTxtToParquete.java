@@ -2,15 +2,34 @@ import model.DataType;
 import org.semanticweb.yars.nx.Node;
 import org.semanticweb.yars.nx.parser.NxParser;
 
-
 import java.io.*;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Pattern;
+
+
+import parquet.Log;
+import parquet.Preconditions;
+import parquet.column.page.PageReadStore;
+import parquet.example.data.Group;
+import parquet.example.data.simple.convert.GroupRecordConverter;
+import parquet.hadoop.ParquetFileReader;
+import parquet.hadoop.ParquetReader;
+import parquet.hadoop.example.GroupReadSupport;
+import parquet.hadoop.metadata.ParquetMetadata;
+import parquet.io.ColumnIOFactory;
+import parquet.io.MessageColumnIO;
+import parquet.io.RecordReader;
+import parquet.schema.MessageType;
+import parquet.schema.MessageTypeParser;
+import utils.CsvParquetWriter;
+import utils.Utils;
 
 
 /**
  * Created by tsotzo on 8/5/2017.
  */
-public class JavaParseTxt {
+public class ParseTxtToParquete {
     private  static String dataset = "";
     private  static String outputPath = "";
     private  static String dictionaryFileName = "";
@@ -21,13 +40,16 @@ public class JavaParseTxt {
     private static String outputHDFSpath = "";
     private  static String filesTypes = "";
 
+    private static final Log LOG = Log.getLog(ParseTxtToParquete.class);
+    public static final String CSV_DELIMITER= ",";
+
 
     public static void main(String[] args) throws Exception {
 
         //Διαβάσουμε απο το properties file
         Properties prop = new Properties();
         InputStream input = null;
-        input = JavaParseTxt.class.getClassLoader().getResourceAsStream("config.properties");
+        input = ParseTxtToParquete.class.getClassLoader().getResourceAsStream("config.properties");
 
 
         // load a properties file
@@ -196,4 +218,49 @@ public class JavaParseTxt {
             }
         }
     }
+
+
+    public static void convertCsvToParquet(File csvFile, File outputParquetFile, boolean enableDictionary) throws IOException {
+        System.out.println("Converting " + csvFile.getName() + " to " + outputParquetFile.getName());
+        String rawSchema = getSchema(csvFile);
+        if(outputParquetFile.exists()) {
+            throw new IOException("Output file " + outputParquetFile.getAbsolutePath() +
+                    " already exists");
+        }
+
+        Path path = new Path(outputParquetFile.toURI());
+
+        MessageType schema = MessageTypeParser.parseMessageType(rawSchema);
+        CsvParquetWriter writer = new CsvParquetWriter(path, schema, enableDictionary);
+
+        BufferedReader br = new BufferedReader(new FileReader(csvFile));
+        String line;
+        int lineNumber = 0;
+        try {
+            while ((line = br.readLine()) != null) {
+                String[] fields = line.split(Pattern.quote(CSV_DELIMITER));
+                writer.write(Arrays.asList(fields));
+                ++lineNumber;
+            }
+
+            writer.close();
+        } finally {
+            LOG.info("Number of lines: " + lineNumber);
+            Utils.closeQuietly(br);
+        }
+    }
+
+
+    public static String getSchema(File csvFile) throws IOException {
+        String fileName = csvFile.getName().substring(
+                0, csvFile.getName().length() - ".csv".length()) + ".schema";
+        File schemaFile = new File(csvFile.getParentFile(), fileName);
+        return readFile(schemaFile.getAbsolutePath());
+    }
+
+
+
+
+
+
 }
