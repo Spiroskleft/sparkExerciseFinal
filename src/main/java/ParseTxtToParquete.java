@@ -1,9 +1,10 @@
 import model.DataType;
+import org.apache.hadoop.fs.Path;
 import org.semanticweb.yars.nx.Node;
 import org.semanticweb.yars.nx.parser.NxParser;
 
 import java.io.*;
-import java.nio.file.Path;
+
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -22,6 +23,7 @@ import parquet.io.MessageColumnIO;
 import parquet.io.RecordReader;
 import parquet.schema.MessageType;
 import parquet.schema.MessageTypeParser;
+import utils.ConvertUtils;
 import utils.CsvParquetWriter;
 import utils.Utils;
 
@@ -45,105 +47,118 @@ public class ParseTxtToParquete {
 
 
     public static void main(String[] args) throws Exception {
+//
+//        //Διαβάσουμε απο το properties file
+//        Properties prop = new Properties();
+//        InputStream input = null;
+//        input = ParseTxtToParquete.class.getClassLoader().getResourceAsStream("config.properties");
+//
+//
+//        // load a properties file
+//        prop.load(input);
+//
+//        dataset = prop.getProperty("dataset");
+//        outputPath = prop.getProperty("outputPath");
+//        dictionaryFileName = prop.getProperty("dictionaryFileName");
+//        filesTypes = prop.getProperty("filesTypes");
+//
+//
+//        inputHDFSpath = prop.getProperty("inputHDFSpath");
+//        outputHDFSpath = prop.getProperty("outputHDFSpath");
+//        writeDataToHDFS = Boolean.valueOf(prop.getProperty("writeDataToHDFS"));
+//
+//        //Είναι το αρχείο το οποίο θέλεμε να εξετάσουμε
+//        FileInputStream is = new FileInputStream(dataset);
+//
+//        //Χρησιμοποιούμε έναν κατάλληλο Parser
+//        //https://github.com/nxparser/nxparser
+//        NxParser nxp = new NxParser();
+//        nxp.parse(is);
+//
+//        //Είναι η λίστα με τα DataType
+//        List<DataType> list = new ArrayList<>();
+//        //Ειναι η λίστα για τα table
+//        List<String> tableList = new ArrayList<>();
+//
+//        for (Node[] nx : nxp) {
+//            DataType data = new DataType();
+//            data.setSubject(nx[0].toString());
+//            data.setTable(nx[1].toString());
+//            data.setObject(nx[2].toString());
+//
+//            list.add(data);
+//
+//
+//            tableList.add(nx[1].toString());
+//        }
+//        System.out.println("Dataset size:"+list.size());
+//
+//        //Βάζω τα table name σε ένα Set για να κόψω τα διπλότυπα
+//        Set<String> tableSet = new HashSet<String>(tableList);
+//        System.out.println("Unique table count: " + tableSet.size());
+//
+//        //Φτιάχνω και ενα map το οποίο θα ειναι to dictionary για να μπορώ να κάνω τα αρχεία με νούμερα
+//        Map<String, Integer> dictionaryMap = new HashMap<>();
+//
+//        //Ειναι τα map για να ελέγχω τί έχω γράψει
+//        Map<String, String> tableMap = new HashMap<>();
+//
+//        //Γεμίζω το MAP
+//        List<String> t = new ArrayList<>(tableSet);
+//        for (int i = 0; i < tableSet.size(); i++) {
+//            tableMap.put(t.get(i), null);
+//            dictionaryMap.put(t.get(i), i);
+//        }
+//
+//
+//        //Διατρέχω την λίστα μου για να φτιάξω τα αρχεία.
+//        //Η λογική είναι ότι θα διατρέχω την λίστα μου και κάθε φορά θα κοιτάω με το map άμα υπάρχει
+//        //το το όνομα του αρχειου .Άμα δεν υπάρχει θα το δημιουργώ και θα βάζω μέσα σε αυτό τα στοιχεία που θέλω.
+//        //Άμα υπάρχει απλά θα το κάνω append.
+//
+//        //Εδώ ειναι η list κανονικα
+//        for (int i = 0; i < list.size(); i++) {
+//            String fileName = "";
+//            //Αν στο map το όνομα του αρχείο ειναι κενο
+//            if (tableMap.get(list.get(i).getTable()) == null) {
+//
+//                //Βάζω σαν όνομα του αρχείου απο το Dictionary
+//                fileName = String.valueOf((dictionaryMap.get(list.get(i).getTable())));
+//
+//                //Ενημερώνω το tableMap
+//                tableMap.put(list.get(i).getTable(), fileName);
+//            } else {
+//                fileName = String.valueOf((dictionaryMap.get(list.get(i).getTable())));
+//            }
+//
+//            String content = list.get(i).getSubject() + "," + list.get(i).getObject() + "\n";
+//
+//            //Γράφω σε αρχείο τα αποτελέσματα
+//            writeInFile(outputPath, content, fileName, filesTypes);
+//
+//        }
+//        //Γράφουμε το Map που είναι το Dictionary σε αρχείο
+//        writeHashMapToCsv(dictionaryMap);
+//
+//        System.out.println("Done");
+//
+//        //Άμα έχουμε επιλέξει να γράψουμε το αρχείο στο HDFS το αποθηκεύουμε
+//        if(writeDataToHDFS) {
+//            HdfsWriter.writeToHDFS(inputHDFSpath, outputHDFSpath);
+//        }
 
-        //Διαβάσουμε απο το properties file
-        Properties prop = new Properties();
-        InputStream input = null;
-        input = ParseTxtToParquete.class.getClassLoader().getResourceAsStream("config.properties");
+
+        File csv = new File("/home/tsotzo/shareFolder/customer.csv");
+        File paq = new File("/home/tsotzo/shareFolder/p1");
+
+        ConvertUtils.convertCsvToParquet(csv,paq);
 
 
-        // load a properties file
-        prop.load(input);
-
-        dataset = prop.getProperty("dataset");
-        outputPath = prop.getProperty("outputPath");
-        dictionaryFileName = prop.getProperty("dictionaryFileName");
-        filesTypes = prop.getProperty("filesTypes");
 
 
-        inputHDFSpath = prop.getProperty("inputHDFSpath");
-        outputHDFSpath = prop.getProperty("outputHDFSpath");
-        writeDataToHDFS = Boolean.valueOf(prop.getProperty("writeDataToHDFS"));
-
-        //Είναι το αρχείο το οποίο θέλεμε να εξετάσουμε
-        FileInputStream is = new FileInputStream(dataset);
-
-        //Χρησιμοποιούμε έναν κατάλληλο Parser
-        //https://github.com/nxparser/nxparser
-        NxParser nxp = new NxParser();
-        nxp.parse(is);
-
-        //Είναι η λίστα με τα DataType
-        List<DataType> list = new ArrayList<>();
-        //Ειναι η λίστα για τα table
-        List<String> tableList = new ArrayList<>();
-
-        for (Node[] nx : nxp) {
-            DataType data = new DataType();
-            data.setSubject(nx[0].toString());
-            data.setTable(nx[1].toString());
-            data.setObject(nx[2].toString());
-
-            list.add(data);
 
 
-            tableList.add(nx[1].toString());
-        }
-        System.out.println("Dataset size:"+list.size());
 
-        //Βάζω τα table name σε ένα Set για να κόψω τα διπλότυπα
-        Set<String> tableSet = new HashSet<String>(tableList);
-        System.out.println("Unique table count: " + tableSet.size());
-
-        //Φτιάχνω και ενα map το οποίο θα ειναι to dictionary για να μπορώ να κάνω τα αρχεία με νούμερα
-        Map<String, Integer> dictionaryMap = new HashMap<>();
-
-        //Ειναι τα map για να ελέγχω τί έχω γράψει
-        Map<String, String> tableMap = new HashMap<>();
-
-        //Γεμίζω το MAP
-        List<String> t = new ArrayList<>(tableSet);
-        for (int i = 0; i < tableSet.size(); i++) {
-            tableMap.put(t.get(i), null);
-            dictionaryMap.put(t.get(i), i);
-        }
-
-
-        //Διατρέχω την λίστα μου για να φτιάξω τα αρχεία.
-        //Η λογική είναι ότι θα διατρέχω την λίστα μου και κάθε φορά θα κοιτάω με το map άμα υπάρχει
-        //το το όνομα του αρχειου .Άμα δεν υπάρχει θα το δημιουργώ και θα βάζω μέσα σε αυτό τα στοιχεία που θέλω.
-        //Άμα υπάρχει απλά θα το κάνω append.
-
-        //Εδώ ειναι η list κανονικα
-        for (int i = 0; i < list.size(); i++) {
-            String fileName = "";
-            //Αν στο map το όνομα του αρχείο ειναι κενο
-            if (tableMap.get(list.get(i).getTable()) == null) {
-
-                //Βάζω σαν όνομα του αρχείου απο το Dictionary
-                fileName = String.valueOf((dictionaryMap.get(list.get(i).getTable())));
-
-                //Ενημερώνω το tableMap
-                tableMap.put(list.get(i).getTable(), fileName);
-            } else {
-                fileName = String.valueOf((dictionaryMap.get(list.get(i).getTable())));
-            }
-
-            String content = list.get(i).getSubject() + "," + list.get(i).getObject() + "\n";
-
-            //Γράφω σε αρχείο τα αποτελέσματα
-            writeInFile(outputPath, content, fileName, filesTypes);
-
-        }
-        //Γράφουμε το Map που είναι το Dictionary σε αρχείο
-        writeHashMapToCsv(dictionaryMap);
-
-        System.out.println("Done");
-
-        //Άμα έχουμε επιλέξει να γράψουμε το αρχείο στο HDFS το αποθηκεύουμε
-        if(writeDataToHDFS) {
-            HdfsWriter.writeToHDFS(inputHDFSpath, outputHDFSpath);
-        }
 
     }
 
@@ -220,43 +235,6 @@ public class ParseTxtToParquete {
     }
 
 
-    public static void convertCsvToParquet(File csvFile, File outputParquetFile, boolean enableDictionary) throws IOException {
-        System.out.println("Converting " + csvFile.getName() + " to " + outputParquetFile.getName());
-        String rawSchema = getSchema(csvFile);
-        if(outputParquetFile.exists()) {
-            throw new IOException("Output file " + outputParquetFile.getAbsolutePath() +
-                    " already exists");
-        }
-
-        Path path = new Path(outputParquetFile.toURI());
-
-        MessageType schema = MessageTypeParser.parseMessageType(rawSchema);
-        CsvParquetWriter writer = new CsvParquetWriter(path, schema, enableDictionary);
-
-        BufferedReader br = new BufferedReader(new FileReader(csvFile));
-        String line;
-        int lineNumber = 0;
-        try {
-            while ((line = br.readLine()) != null) {
-                String[] fields = line.split(Pattern.quote(CSV_DELIMITER));
-                writer.write(Arrays.asList(fields));
-                ++lineNumber;
-            }
-
-            writer.close();
-        } finally {
-            LOG.info("Number of lines: " + lineNumber);
-            Utils.closeQuietly(br);
-        }
-    }
-
-
-    public static String getSchema(File csvFile) throws IOException {
-        String fileName = csvFile.getName().substring(
-                0, csvFile.getName().length() - ".csv".length()) + ".schema";
-        File schemaFile = new File(csvFile.getParentFile(), fileName);
-        return readFile(schemaFile.getAbsolutePath());
-    }
 
 
 

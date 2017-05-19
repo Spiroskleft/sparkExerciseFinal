@@ -23,6 +23,7 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
 
+
 public class TestPerfRegression {
   private static final Log LOG = Log.getLog(TestPerfRegression.class);
   

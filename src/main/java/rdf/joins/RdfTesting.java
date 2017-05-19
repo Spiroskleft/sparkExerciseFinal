@@ -19,22 +19,16 @@ public class RdfTesting {
         //The predicate will tell us the file that we must take
         //Φορτώνουμε το κάθε αρχείο σε ένα Dataset
         Dataset<Row> df1 = sparkSession.read().csv("/usr/lib/spark/bin/RDF/RDF/" + predicate1 + ".csv");
+        Dataset<Row> parquet = sparkSession.read()
+                .parquet("/home/user/test/p.parquet");
+
+//        df1.write().parquet("/home/user/test/a");
 
 
-        df1.write().parquet("/home/user/test/a");
-
-
-//        df1.createOrReplaceTempView("tableName1");
-//        //Κάνουμε προβολή των δεδομένων
-//        System.out.println("-------------------SubjectSubject----------------------------");
+        parquet.createOrReplaceTempView("tableName1");
+        System.out.println("-------------------parquet----------------------------");
 //
-//        sparkSession.sql("SELECT distinct tableName1._c0 as subject0" +
-//                " FROM tableName1 , tableName2 " +
-//                " where tableName1._c1='" + object1 + "'" +
-//                " and tableName1._c0=tableName2._c0" +
-//                " and tableName2._c1='" + object2 + "'").show();
-//    }
-
-
+        sparkSession.sql("SELECT *  FROM tableName1").show();
     }
+
 }
