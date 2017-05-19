@@ -136,8 +136,8 @@ public class RdfJoins {
         //The predicate will tell us the file that we must take
         //Φορτώνουμε το αρχειο σε ένα Dataset
 
-        Dataset<Row> df1 = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/" + predicate1 + ".csv");
-        Dataset<Row> df2 = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/" + predicate2 + ".csv");
+        Dataset<Row> df1 = sparkSession.read().csv("hdfs://master/test/temp/example/" + predicate1 + ".csv");
+        Dataset<Row> df2 = sparkSession.read().csv("hdfs://master/test/temp/example/" + predicate2 + ".csv");
 
         df1.createOrReplaceTempView("tableName1");
         df2.createOrReplaceTempView("tableName2");
