@@ -1,9 +1,13 @@
 import model.DataType;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.*;
+import org.apache.hadoop.io.IOUtils;
 import org.semanticweb.yars.nx.Node;
 import org.semanticweb.yars.nx.parser.NxParser;
 
 
 import java.io.*;
+import java.net.URI;
 import java.util.*;
 
 
@@ -116,11 +120,15 @@ public class JavaParseTxt {
         //Γράφουμε το Map που είναι το Dictionary σε αρχείο
         writeHashMapToCsv(dictionaryMap);
 
+//        writeToHDFS();
+
         System.out.println("Done");
 
         //Άμα έχουμε επιλέξει να γράψουμε το αρχείο στο HDFS το αποθηκεύουμε
         if(writeDataToHDFS) {
-            HdfsWriter.writeToHDFS(inputHDFSpath, outputHDFSpath);
+//            HdfsWriter.writeToHDFS(inputHDFSpath, outputHDFSpath);
+
+
         }
 
     }
@@ -167,6 +175,7 @@ public class JavaParseTxt {
             File file = new File(filePathType);
             fop = new FileOutputStream(file, true);
             // if file doesn't exists, then create it
+
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -174,6 +183,9 @@ public class JavaParseTxt {
             // get the content in bytes
             byte[] contentInBytes = content.getBytes("UTF-8");
 
+            InputStream input = new ByteArrayInputStream(contentInBytes);
+
+            writeToHDFS(input,outputHDFSpath);
 
             if (fop != null) {
                 fop.write(contentInBytes);
@@ -196,4 +208,38 @@ public class JavaParseTxt {
             }
         }
     }
+
+
+    public static void writeToHDFS (InputStream inputStream, String outputHDFSpath)throws IOException {
+
+
+        // Ορίζουμε το αρχείο στο local file system
+        String uri = outputHDFSpath;
+        InputStream in = null;
+        Path pt = new Path(uri);
+        // Ορίζουμε το conf των αρχείων Hdfs
+        Configuration myConf = new Configuration();
+        Path outputPath = new Path(outputHDFSpath);
+        // Ορίζουμε το path του hdfs
+        myConf.set("fs.defaultFS","hdfs://master:9000");
+        // Δημιουργία του output (του αρχείου Hdfs)
+        FileSystem fSystem = FileSystem.get(URI.create(uri),myConf);
+        OutputStream os = fSystem.create(outputPath);
+        try{
+            InputStream is = new BufferedInputStream(new FileInputStream(uri));
+            IOUtils.copyBytes(is, os, 4096, false);
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+        finally{
+            IOUtils.closeStream(in);
+        }
+    }
+
+
+
+
+
+
 }

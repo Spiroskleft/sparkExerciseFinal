@@ -35,7 +35,7 @@ public class HdfsWriter {
             Configuration myConf = new Configuration();
             Path outputPath = new Path(outputHDFSpath);
             // Ορίζουμε το path του hdfs
-            myConf.set("fs.defaultFS","hdfs://localhost:9000");
+            myConf.set("fs.defaultFS","hdfs://master:9000");
             // Δημιουργία του output (του αρχείου Hdfs)
 
             FileSystem fs = FileSystem.get(myConf);
