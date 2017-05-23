@@ -35,23 +35,12 @@ public class HdfsWriter {
             Configuration myConf = new Configuration();
             Path outputPath = new Path(outputHDFSpath);
             // Ορίζουμε το path του hdfs
-            myConf.set("fs.defaultFS","hdfs://master:9000");
+            myConf.set("fs.defaultFS","hdfs://master:8020");
             // Δημιουργία του output (του αρχείου Hdfs)
 
             FileSystem fs = FileSystem.get(myConf);
             fs.copyFromLocalFile(new Path(inputHDFSpath),
                     new Path(outputHDFSpath));
-//            OutputStream os = fSystem.create(outputPath);
-//            try{
-//                InputStream is = new BufferedInputStream(new FileInputStream(uri));
-//                IOUtils.copyBytes(is, os, 4096, false);
-//            }
-//            catch(IOException e){
-//                e.printStackTrace();
-//            }
-//            finally{
-//                IOUtils.closeStream(in);
-//            }
         }
 
 }

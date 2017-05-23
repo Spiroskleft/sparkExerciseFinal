@@ -2,12 +2,14 @@ import model.DataType;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.IOUtils;
+import org.apache.hadoop.util.Progressable;
 import org.semanticweb.yars.nx.Node;
 import org.semanticweb.yars.nx.parser.NxParser;
 
 
 import java.io.*;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 
 
@@ -115,22 +117,22 @@ public class JavaParseTxt {
 
             //Γράφω σε αρχείο τα αποτελέσματα
             writeInFile(outputPath, content, fileName, filesTypes);
+//            writeInFileToHDFS(outputHDFSpath, content, fileName, filesTypes);
+
+
 
         }
         //Γράφουμε το Map που είναι το Dictionary σε αρχείο
         writeHashMapToCsv(dictionaryMap);
 
-//        writeToHDFS();
 
-        System.out.println("Done");
 
         //Άμα έχουμε επιλέξει να γράψουμε το αρχείο στο HDFS το αποθηκεύουμε
         if(writeDataToHDFS) {
-//            HdfsWriter.writeToHDFS(inputHDFSpath, outputHDFSpath);
-
-
+            HdfsWriter.writeToHDFS(inputHDFSpath, outputHDFSpath);
         }
 
+        System.out.println("Done");
     }
 
 
@@ -185,7 +187,7 @@ public class JavaParseTxt {
 
             InputStream input = new ByteArrayInputStream(contentInBytes);
 
-            writeToHDFS(input,outputHDFSpath);
+            //writeToHDFS(input,outputHDFSpath);
 
             if (fop != null) {
                 fop.write(contentInBytes);
@@ -221,7 +223,7 @@ public class JavaParseTxt {
         Configuration myConf = new Configuration();
         Path outputPath = new Path(outputHDFSpath);
         // Ορίζουμε το path του hdfs
-        myConf.set("fs.defaultFS","hdfs://master:9000");
+        myConf.set("fs.defaultFS","hdfs://master:8020");
         // Δημιουργία του output (του αρχείου Hdfs)
         FileSystem fSystem = FileSystem.get(URI.create(uri),myConf);
         OutputStream os = fSystem.create(outputPath);
@@ -235,7 +237,83 @@ public class JavaParseTxt {
         finally{
             IOUtils.closeStream(in);
         }
+
+
+
+
+
+
     }
+
+
+
+
+
+    /**
+     * Αποθηκεύει σε αρχεία το περιοχόμενο το οποίο του δίνεις
+     *
+     * @param filepath Είναι η παράμετρος όπου του ορίζεις το path που θές να αποθηκεύσεις τα αρχεία
+     * @param content  Είναι το περιεχόμενο το οποίο θές να έχει το αρχείο
+     * @param fileName Είναι το όνομα το οποίο θές να έχει το αρχείο
+     * @param fileType Είναι το τύπος του αρχείου που θές
+     */
+    public static void writeInFileToHDFS(String filepath, String content, String fileName, String fileType) throws URISyntaxException, IOException {
+        FileOutputStream fop = null;
+        String filePathType = filepath+ fileName + "." + fileType;
+        Configuration configuration = new Configuration();
+        FileSystem hdfs  = FileSystem.get(new URI("hdfs://master:8020"),configuration);
+        Path file = new Path(filePathType);
+        try {
+//            File file = new File(filePathType);
+//            fop = new FileOutputStream(file, true);
+            // if file doesn't exists, then create it
+//            OutputStream os = null;
+//            OutputStream os = hdfs.create(file,() -> );
+            if (!hdfs.exists(file)) {
+                 hdfs.createNewFile(file);
+               // hdfs.createNewFile(file);
+            }else {
+//                 hdfs.append(file,4096,);
+            }
+//            OutputStream os = hdfs.create(file);
+//            BufferedWriter br = new BufferedWriter(new OutputStreamWriter(os,"UTF-8"));
+//            br.append(content);
+//            br.close();
+            hdfs.close();
+
+            // get the content in bytes
+            byte[] contentInBytes = content.getBytes("UTF-8");
+
+            InputStream input = new ByteArrayInputStream(contentInBytes);
+
+
+
+            //writeToHDFS(input,outputHDFSpath);
+
+            if (fop != null) {
+                fop.write(contentInBytes);
+
+                fop.flush();
+                fop.close();
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fop != null) {
+                    fop.close();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
 
 
 
