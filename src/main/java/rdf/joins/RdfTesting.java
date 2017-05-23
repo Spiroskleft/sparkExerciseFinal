@@ -31,4 +31,24 @@ public class RdfTesting {
         sparkSession.sql("SELECT *  FROM tableName1").show();
     }
 
+
+    public static void outPuttoParquet(String predicate1,  SparkSession sparkSession) throws IOException {
+        //Read csv from HDFS
+        Dataset<Row> df1 = sparkSession.read().csv("hdfs://master:8020/test/temp11/" + predicate1 + ".csv");
+
+        //Write parquet to HDFS
+        df1.write().parquet("hdfs://master:8020/test/temp111");
+
+
+        df1.createOrReplaceTempView("tableName1");
+        System.out.println("-------------------parquet----------------------------");
+//
+        sparkSession.sql("SELECT *  FROM tableName1").show();
+
+    }
+
+
+
+
+
 }
