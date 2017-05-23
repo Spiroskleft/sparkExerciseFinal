@@ -68,7 +68,7 @@ public class RDFReading {
 //        RdfJoins.findSubjectObjectJoin("likes","follows","i2","b",sparkSession);
 
 
-//        RdfTesting.testParquet("likes",sparkSession);
+        RdfTesting.testParquet("likes",sparkSession);
 
         RdfTesting.outPuttoParquet("0",sparkSession);
     }
