@@ -128,6 +128,7 @@ public class ParseTxtToVP {
 
     /**
      * Μετατρέπει Ένα Map σε ένα csv
+     * και στο τέλος το αποθηκεύει στο HDFS
      *
      * @param map
      * @throws Exception
@@ -147,8 +148,12 @@ public class ParseTxtToVP {
         } catch (Exception e ){
             e.printStackTrace();
         }
-        //Γράφουμε το αρχείο
-        writeInFile(outputPath, sb.toString(), dictionaryFileName, filesTypes);
+
+        //Άμα έχουμε επιλέξει να γράψουμε το αρχείο στο HDFS το αποθηκεύουμε
+        if(writeDataToHDFS) {
+            //Γράφουμε το αρχείο
+            writeInFile(outputPath, sb.toString(), dictionaryFileName, filesTypes);
+        }
     }
 
 
@@ -173,8 +178,6 @@ public class ParseTxtToVP {
 
             // get the content in bytes
             byte[] contentInBytes = content.getBytes("UTF-8");
-
-
             if (fop != null) {
                 fop.write(contentInBytes);
 

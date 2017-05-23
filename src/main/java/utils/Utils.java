@@ -52,7 +52,7 @@ public class Utils {
       }
     } catch (IOException ioe) {
       LOG.warn("Exception closing reader " + res + ": " + ioe.getMessage());
-    }    
+    }
   }
 
   public static void writePerfResult(String module, long millis) throws IOException{
@@ -66,7 +66,7 @@ public class Utils {
       closeQuietly(writer);
     }
   }
-  
+
   public static long readPerfResult(String version, String module) throws IOException {
     BufferedReader reader = null;
     try {
@@ -77,7 +77,7 @@ public class Utils {
       closeQuietly(reader);
     }
   }
-  
+
   public static File createTestFile(long largerThanMB) throws IOException {
     File outputFile = new File("target/test/csv/perftest.csv");
     if(outputFile.exists()) {
@@ -85,10 +85,10 @@ public class Utils {
     }
     File toCopy = new File("../parquet-testdata/tpch/customer.csv");
     FileUtils.copyFile(new File("../parquet-testdata/tpch/customer.schema"), new File("target/test/csv/perftest.schema"));
-    
+
     OutputStream output = null;
     InputStream input = null;
-    
+
     try {
       output = new BufferedOutputStream(new FileOutputStream(outputFile, true));
       input = new BufferedInputStream(new FileInputStream(toCopy));
@@ -102,10 +102,10 @@ public class Utils {
       closeQuietly(input);
       closeQuietly(output);
     }
-    
+
     return outputFile;
   }
-  
+
   public static File[] getAllOriginalCSVFiles() {
     File baseDir = new File("../parquet-testdata/tpch");
     final File[] csvFiles = baseDir.listFiles(new FilenameFilter() {
@@ -121,19 +121,19 @@ public class Utils {
     final String currentVersion = getCurrentVersion();
     final String[] versions = baseDir.list(new FilenameFilter() {
       public boolean accept(File dir, String name) {
-        return name.startsWith("parquet-compat-") 
+        return name.startsWith("parquet-compat-")
             && new Version(name.replace("parquet-compat-", "")).compareTo(new Version(currentVersion)) < 0;
       }
     });
     return versions;
   }
-  
+
   static class Version implements Comparable<Version> {
     int major;
     int minor;
     int minorminor;
     String tag;
-    
+
     Version(String versionStr) {
       String[] versions = versionStr.split("\\.");
       int size = versions.length;
@@ -159,7 +159,7 @@ public class Utils {
         throw new RuntimeException("Illegal version number " + versionStr);
       }
     }
-    
+
     public int compareMajorMinor(Version o) {
       return ComparisonChain.
           start().
@@ -178,12 +178,12 @@ public class Utils {
       compare(tag, o.tag).
       result();
     }
-    
+
     // Very basic implementation of comparisonchain
     private static class ComparisonChain {
       int result = 0;
       private ComparisonChain(int result) {
-        this.result = result; 
+        this.result = result;
       }
       static ComparisonChain start() {
         return new ComparisonChain(0);
@@ -211,10 +211,10 @@ public class Utils {
       int result() {
         return result;
       }
-    }    
+    }
   }
-  
-  
+
+
   public static File getParquetOutputFile(String name, String module, boolean deleteIfExists) {
     File outputFile = new File("target/parquet/", getParquetFileName(name, module));
     outputFile.getParentFile().mkdirs();
@@ -228,7 +228,7 @@ public class Utils {
     return name + (module != null ? "." + module : "") + ".parquet";
   }
 
-  public static File getParquetFile(String name, String version, String module, boolean failIfNotExist) 
+  public static File getParquetFile(String name, String version, String module, boolean failIfNotExist)
       throws IOException {
     File parquetFile = new File("../"+version+"/target/parquet/", getParquetFileName(name, module));
     parquetFile.getParentFile().mkdirs();
@@ -241,11 +241,11 @@ public class Utils {
     }
     return parquetFile;
   }
-  
+
   private static String getCurrentVersion() throws IOException {
     return new File(".").getCanonicalFile().getName().replace("parquet-compat-", "");
   }
-  
+
   public static String[] getImpalaDirectories() throws IOException {
     File baseDir = new File("../parquet-testdata/impala");
     final String currentVersion = getCurrentVersion();
