@@ -128,7 +128,6 @@ public class ParseTxtToVP {
 
     /**
      * Μετατρέπει Ένα Map σε ένα csv
-     * και στο τέλος το αποθηκεύει στο HDFS
      *
      * @param map
      * @throws Exception

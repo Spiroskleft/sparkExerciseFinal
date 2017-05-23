@@ -3,12 +3,16 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
 
+import java.net.URI;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class HdfsWriter {
 
     public HdfsWriter(){
+
     }
 
     /**
@@ -19,6 +23,7 @@ public class HdfsWriter {
      * @throws IOException
      */
     public static void writeToHDFS (String inputHDFSpath, String outputHDFSpath)throws IOException {
+
 
             // Ορίζουμε το αρχείο στο local file system
             String uri = inputHDFSpath;
@@ -33,8 +38,21 @@ public class HdfsWriter {
             myConf.set("fs.defaultFS","hdfs://master:8020");
 
             // Δημιουργία του output (του αρχείου Hdfs)
+
             FileSystem fs = FileSystem.get(myConf);
             fs.copyFromLocalFile(new Path(inputHDFSpath),
                     new Path(outputHDFSpath));
+//            OutputStream os = fSystem.create(outputPath);
+//            try{
+//                InputStream is = new BufferedInputStream(new FileInputStream(uri));
+//                IOUtils.copyBytes(is, os, 4096, false);
+//            }
+//            catch(IOException e){
+//                e.printStackTrace();
+//            }
+//            finally{
+//                IOUtils.closeStream(in);
+//            }
         }
+
 }
