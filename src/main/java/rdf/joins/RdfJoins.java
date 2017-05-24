@@ -7,11 +7,24 @@ import org.apache.spark.sql.SparkSession;
 import utils.ReadPropertiesFile;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
+import java.util.Properties;
 
 /**
  * Created by tsotzo on 15/5/2017.
  */
 public class RdfJoins {
+
+    //Θέτουμε τις μεταβλητές για το path των αρχείων -> στη μέθοδο ReadFilePath ()
+private static String pathForJoinsCSV = "" ;
+private static String pathForJoinsParquet = "";
+
+
+    // Θα πρέπει να του δίνουμε σαν παράμετρο για κάθε μέθοδο το απο πού θα διαβάζει τα predicates και για το αν θα είναι parquet ή csv
+    // τα αρχεία αυτά
+
+
     /**
      * Working with triples (s,p,o)
      * when triples in verticalPartitioning (VP)
@@ -27,12 +40,38 @@ public class RdfJoins {
      * @param object2
      * @param predicate1
      * @param predicate2
+     * @param type
+     * @param path
      */
-    public static void findSubjectSubjectJoin(String predicate1, String predicate2, String object1, String object2, SparkSession sparkSession) throws IOException {
+
+    public static void findSubjectSubjectJoin(String predicate1, String predicate2, String object1, String object2, SparkSession sparkSession, String type , String path) throws IOException {
+
+        Dataset<Row> df1 = null;
+        Dataset<Row> df2 = null;
+
+         // Διαβάζουμε από το κατάλληλο path
+        ReadFilePath();
+
         //The predicate will tell us the file that we must take
-        //Φορτώνουμε το κάθε αρχείο σε ένα Dataset
-        Dataset<Row> df1 = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/"+ predicate1 + ".csv");
-        Dataset<Row> df2 = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/"+ predicate2 + ".csv");
+        //Φορτώνουμε το κάθε αρχείο σε ένα Dataset αναλόγως με το αν είναι csv ή parquet
+
+        if (Objects.equals(type, "csv")) {
+
+            path = pathForJoinsCSV ;
+             df1 = sparkSession.read().csv(path + predicate1 + ".csv");
+             df2 = sparkSession.read().csv(path + predicate2 + ".csv");
+
+        }
+        else if (Objects.equals(type, "parquet")) {
+
+            path = pathForJoinsParquet;
+             df1 = sparkSession.read().parquet(path+ predicate1 + ".parquet");
+            df2 = sparkSession.read().parquet(path + predicate2 + ".parquet");
+        }
+
+        else {
+            System.out.println("Wrong File Type as a Parameter, Select 'csv' or 'parquet' ");
+        }
 
         df1.createOrReplaceTempView("tableName1");
         df2.createOrReplaceTempView("tableName2");
@@ -45,6 +84,8 @@ public class RdfJoins {
                 " and tableName1._c0=tableName2._c0" +
                 " and tableName2._c1='" + object2 + "'").show();
     }
+
+
 
 
     /**
@@ -60,12 +101,38 @@ public class RdfJoins {
      * @param subject2
      * @param predicate1
      * @param predicate2
+     * @param type
+     * @param path
      */
-    public static void findObjectObjectJoin(String predicate1, String predicate2, String subject1, String subject2, SparkSession sparkSession) throws AnalysisException, IOException {
-        //The predicate will tell us the file that we must take
-        //Φορτώνουμε το αρχειο σε ένα Dataset
-        Dataset<Row> dfa = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/"+ predicate1 + ".csv");
-        Dataset<Row> dfb = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/"+ predicate2 + ".csv");
+    public static void findObjectObjectJoin(String predicate1, String predicate2, String subject1, String subject2, SparkSession sparkSession, String type, String path) throws AnalysisException, IOException {
+
+        Dataset<Row> dfa = null;
+        Dataset<Row> dfb = null;
+
+        // Διαβάζουμε από το κατάλληλο path
+        ReadFilePath();
+
+        //Φορτώνουμε το κάθε αρχείο σε ένα Dataset αναλόγως με το αν είναι csv ή parquet
+
+        if (Objects.equals(type, "csv")) {
+
+            path = pathForJoinsCSV ;
+            dfa = sparkSession.read().csv(path + predicate1 + ".csv");
+            dfb = sparkSession.read().csv(path + predicate2 + ".csv");
+
+        }
+        else if (Objects.equals(type, "parquet")) {
+
+            path = pathForJoinsParquet;
+            dfa = sparkSession.read().parquet(path+ predicate1 + ".parquet");
+            dfb = sparkSession.read().parquet(path + predicate2 + ".parquet");
+        }
+
+        else {
+            System.out.println("Wrong File Type as a Parameter, Select 'csv' or 'parquet' ");
+        }
+
+
 
         dfa.createOrReplaceTempView("tableName1");
         dfb.createOrReplaceTempView("tableName2");
@@ -97,12 +164,36 @@ public class RdfJoins {
      * @param object2
      * @param predicate1
      * @param predicate2
+     * @param type
+     * @param path
      */
-    public static void findObjectSubjectJoin(String predicate1, String predicate2, String subject1, String object2, SparkSession sparkSession) throws AnalysisException, IOException {
-        //The predicate will tell us the file that we must take
-        //Φορτώνουμε το αρχειο σε ένα Dataset
-        Dataset<Row> df3 = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/"+ predicate1 + ".csv");
-        Dataset<Row> df4 = sparkSession.read().csv("hdfs://localhost:9000/exampleWithFollows/example/" + predicate2 + ".csv");
+    public static void findObjectSubjectJoin(String predicate1, String predicate2, String subject1, String object2, SparkSession sparkSession, String type, String path) throws AnalysisException, IOException {
+
+        Dataset<Row> df3 = null;
+        Dataset<Row> df4 = null;
+
+        // Διαβάζουμε από το κατάλληλο path
+        ReadFilePath();
+
+        //Φορτώνουμε το κάθε αρχείο σε ένα Dataset αναλόγως με το αν είναι csv ή parquet
+
+        if (Objects.equals(type, "csv")) {
+
+            path = pathForJoinsCSV ;
+            df3 = sparkSession.read().csv(path + predicate1 + ".csv");
+            df4 = sparkSession.read().csv(path + predicate2 + ".csv");
+
+        }
+        else if (Objects.equals(type, "parquet")) {
+
+            path = pathForJoinsParquet;
+            df3 = sparkSession.read().parquet(path+ predicate1 + ".parquet");
+            df4 = sparkSession.read().parquet(path + predicate2 + ".parquet");
+        }
+
+        else {
+            System.out.println("Wrong File Type as a Parameter, Select 'csv' or 'parquet' ");
+        }
 
         df3.createOrReplaceTempView("tableName1");
         df4.createOrReplaceTempView("tableName2");
@@ -132,12 +223,35 @@ public class RdfJoins {
      * @param predicate1
      * @param predicate2
      */
-    public static void findSubjectObjectJoin(String predicate1, String predicate2,  String object1,String subject2, SparkSession sparkSession) throws AnalysisException, IOException {
-        //The predicate will tell us the file that we must take
-        //Φορτώνουμε το αρχειο σε ένα Dataset
+    public static void findSubjectObjectJoin(String predicate1, String predicate2,  String object1,String subject2, SparkSession sparkSession, String type,String path) throws AnalysisException, IOException {
 
-        Dataset<Row> df1 = sparkSession.read().csv("hdfs://master/test/temp/example/" + predicate1 + ".csv");
-        Dataset<Row> df2 = sparkSession.read().csv("hdfs://master/test/temp/example/" + predicate2 + ".csv");
+        Dataset<Row> df1 = null;
+        Dataset<Row> df2 = null;
+
+        // Διαβάζουμε από το κατάλληλο path
+        ReadFilePath();
+
+        //Φορτώνουμε το κάθε αρχείο σε ένα Dataset αναλόγως με το αν είναι csv ή parquet
+
+        if (Objects.equals(type, "csv")) {
+
+            path = pathForJoinsCSV ;
+            df1 = sparkSession.read().csv(path + predicate1 + ".csv");
+            df2 = sparkSession.read().csv(path + predicate2 + ".csv");
+
+        }
+        else if (Objects.equals(type, "parquet")) {
+
+            path = pathForJoinsParquet;
+            df1 = sparkSession.read().parquet(path+ predicate1 + ".parquet");
+            df2 = sparkSession.read().parquet(path + predicate2 + ".parquet");
+        }
+
+        else {
+            System.out.println("Wrong File Type as a Parameter, Select 'csv' or 'parquet' ");
+        }
+
+
 
         df1.createOrReplaceTempView("tableName1");
         df2.createOrReplaceTempView("tableName2");
@@ -151,4 +265,16 @@ public class RdfJoins {
                 " and tableName1._c1='" + object1 + "'" +
                 " and tableName2._c0='" + subject2 + "'").show();
     }
+
+    public static void ReadFilePath () throws IOException {
+        Properties prop = new Properties();
+        InputStream input = null;
+        input = RdfJoins.class.getClassLoader().getResourceAsStream("config.properties");
+
+        // load a properties file
+        prop.load(input);
+        pathForJoinsCSV = prop.getProperty("pathForJoinsCSV");
+        pathForJoinsParquet = prop.getProperty("pathForJoinsParquet") ;
+    }
+
 }
