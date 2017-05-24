@@ -1,5 +1,9 @@
 package rdf.joins;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -37,18 +41,44 @@ public class RdfTesting {
         Dataset<Row> df1 = sparkSession.read().csv("hdfs://master:8020/test/temp11/" + predicate1 + ".csv");
 
         //Write parquet to HDFS
-        df1.write().parquet("hdfs://master:8020/test/temp111");
+        df1.write().parquet("hdfs://master:8020/test/temp111/" + predicate1);
 
 
-        df1.createOrReplaceTempView("tableName1");
-        System.out.println("-------------------parquet----------------------------");
+        // Ορίζουμε το conf των αρχείων Hdfs
+        Configuration myConf = new Configuration();
+
+        // Ορίζουμε το path του hdfs
+        myConf.set("fs.defaultFS", "hdfs://master:8020");
+
+        FileSystem fs = FileSystem.get(myConf);
+        fs.mkdirs(new Path("/testP/"));
+        FileStatus afs[] = fs.listStatus(new Path("hdfs://master:8020/test/temp111/"+predicate1));
+
+        for (FileStatus aFile : afs) {
+            if (aFile.isDir()) {
+                fs.delete(aFile.getPath(), true);
+                // delete all directories and sub-directories (if any) in the output directory
+            } else {
+                if (aFile.getPath().getName().contains("_")) {
+                    System.out.println("-------------------delete----------------------------");
+                    fs.delete(aFile.getPath(), true);
+                }
+                    // delete all log files and the _SUCCESS file in the output directory
+                else {
+                    System.out.println("-------------------rename----------------------------");
+                    fs.rename(aFile.getPath(), new Path("hdfs://master:8020/test/temp111/"+predicate1+"/"+predicate1 + ".parquet"));
+                }
+
 //
-        sparkSession.sql("SELECT *  FROM tableName1").show();
+//                df1.createOrReplaceTempView("tableName1");
+//                System.out.println("-------------------parquet----------------------------");
+                Dataset<Row> sqlDF =sparkSession.sql("SELECT * FROM parquet.`"+"hdfs://master:8020/test/temp111/"+predicate1+"/"+predicate1 + ".parquet"+"`");
+                sqlDF.show();
+
+            }
+
+
+        }
 
     }
-
-
-
-
-
 }
