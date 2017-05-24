@@ -23,7 +23,15 @@ public class RdfTrasformation {
 //    private static String outputParquetPath = "hdfs://master:8020/test/temp11/";
 
 
-
+    /**
+     * Μέθοδος που μετρέπει τα csv αρχεία σε parquet μέσω του spark.
+     * Κάνει και αλλαγή του ονόματος απο το default του spark στο όνομα που έχει το csv
+     * @param predicate1 είναι το όνομα του csv που θέλουμε να μετατρέψουμε σε parquet
+     * @param inputCSVPath είναι το path όπου βρίσκονται τα csv
+     * @param outputParquetPath είναι το path που θέλουμε να βάλουμε τα csv
+     * @param sparkSession το session του spark
+     * @throws IOException
+     */
     public static void tranformCSVtoParquet(String predicate1,String inputCSVPath,String  outputParquetPath, SparkSession sparkSession) throws IOException {
         //Read csv from HDFS
         Dataset<Row> df1 = sparkSession.read().csv(inputCSVPath + predicate1 + ".csv");
@@ -31,11 +39,8 @@ public class RdfTrasformation {
         //Write parquet to HDFS
         df1.write().parquet(outputParquetPath + predicate1);
 
-
         // Ορίζουμε το conf των αρχείων Hdfs
         Configuration myConf = new Configuration();
-
-        // Ορίζουμε το path του hdfs
         myConf.set("fs.defaultFS", "hdfs://master:8020");
 
         FileSystem fs = FileSystem.get(myConf);
@@ -59,11 +64,8 @@ public class RdfTrasformation {
 
             }
 
-
 //        Dataset<Row> sqlDF =sparkSession.sql("SELECT * FROM parquet.`"+outputParquetPath+predicate1+"/"+predicate1 + ".parquet"+"`");
 //        sqlDF.show();
-
-
         }
 
 }
