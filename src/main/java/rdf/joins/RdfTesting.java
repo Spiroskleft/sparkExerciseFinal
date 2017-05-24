@@ -19,10 +19,14 @@ public class RdfTesting {
      *
      * @param predicate1
      */
+    private static String inputCSVPath = "/usr/lib/spark/bin/RDF/RDF/";
+    private static String outputParquetPath = "hdfs://master:8020/test/temp11/";
+
     public static void testParquet(String predicate1,  SparkSession sparkSession) throws IOException {
         //The predicate will tell us the file that we must take
         //Φορτώνουμε το κάθε αρχείο σε ένα Dataset
-        Dataset<Row> df1 = sparkSession.read().csv("/usr/lib/spark/bin/RDF/RDF/" + predicate1 + ".csv");
+
+        Dataset<Row> df1 = sparkSession.read().csv( inputCSVPath+ predicate1 + ".csv");
         Dataset<Row> parquet = sparkSession.read()
                 .parquet("/home/user/test/p.parquet");
 
@@ -41,7 +45,7 @@ public class RdfTesting {
         Dataset<Row> df1 = sparkSession.read().csv("hdfs://master:8020/test/temp11/" + predicate1 + ".csv");
 
         //Write parquet to HDFS
-        df1.write().parquet("hdfs://master:8020/test/temp111/" + predicate1);
+        df1.write().parquet(outputParquetPath + predicate1);
 
 
         // Ορίζουμε το conf των αρχείων Hdfs
@@ -51,34 +55,31 @@ public class RdfTesting {
         myConf.set("fs.defaultFS", "hdfs://master:8020");
 
         FileSystem fs = FileSystem.get(myConf);
-        fs.mkdirs(new Path("/testP/"));
-        FileStatus afs[] = fs.listStatus(new Path("hdfs://master:8020/test/temp111/"+predicate1));
-
+        FileStatus afs[] = fs.listStatus(new Path(outputParquetPath+predicate1));
         for (FileStatus aFile : afs) {
-            if (aFile.isDir()) {
-                fs.delete(aFile.getPath(), true);
-                // delete all directories and sub-directories (if any) in the output directory
-            } else {
-                if (aFile.getPath().getName().contains("_")) {
+//            if (aFile.isDir()) {
+//                fs.delete(aFile.getPath(), true);
+//                // delete all directories and sub-directories (if any) in the output directory
+//            } else {
+            //Σβήνουμε το _SUCCESS αρχείο
+                if (aFile.getPath().getName().contains("_SUCCESS")) {
                     System.out.println("-------------------delete----------------------------");
                     fs.delete(aFile.getPath(), true);
                 }
-                    // delete all log files and the _SUCCESS file in the output directory
-                else {
+                    // Μετονομάσουμε το αρχείο part-00000... σε δικό μας όνομα
+                else if ((aFile.getPath().getName().contains("part-00000"))) {
                     System.out.println("-------------------rename----------------------------");
-                    fs.rename(aFile.getPath(), new Path("hdfs://master:8020/test/temp111/"+predicate1+"/"+predicate1 + ".parquet"));
-                }
-
-//
-//                df1.createOrReplaceTempView("tableName1");
-//                System.out.println("-------------------parquet----------------------------");
-                Dataset<Row> sqlDF =sparkSession.sql("SELECT * FROM parquet.`"+"hdfs://master:8020/test/temp111/"+predicate1+"/"+predicate1 + ".parquet"+"`");
-                sqlDF.show();
+                    fs.rename(aFile.getPath(), new Path(outputParquetPath+predicate1 +"/"+predicate1 + ".parquet"));
+                }else
+                    System.out.println("------------------Nothing---------------");
 
             }
 
 
+        Dataset<Row> sqlDF =sparkSession.sql("SELECT * FROM parquet.`"+outputParquetPath+predicate1+"/"+predicate1 + ".parquet"+"`");
+        sqlDF.show();
+
+
         }
 
-    }
 }
