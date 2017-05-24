@@ -1,4 +1,4 @@
-package rdf.joins;
+package utils;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
@@ -14,35 +14,19 @@ import java.io.IOException;
 /**
  * Created by tsotzo on 15/5/2017.
  */
-public class RdfTesting {
+public class RdfTrasformation {
     /**
      *
      * @param predicate1
      */
-    private static String inputCSVPath = "/usr/lib/spark/bin/RDF/RDF/";
-    private static String outputParquetPath = "hdfs://master:8020/test/temp11/";
-
-    public static void testParquet(String predicate1,  SparkSession sparkSession) throws IOException {
-        //The predicate will tell us the file that we must take
-        //Φορτώνουμε το κάθε αρχείο σε ένα Dataset
-
-        Dataset<Row> df1 = sparkSession.read().csv( inputCSVPath+ predicate1 + ".csv");
-        Dataset<Row> parquet = sparkSession.read()
-                .parquet("/home/user/test/p.parquet");
-
-//        df1.write().parquet("/home/user/test/a");
+//    private static String inputCSVPath = "/usr/lib/spark/bin/RDF/RDF/";
+//    private static String outputParquetPath = "hdfs://master:8020/test/temp11/";
 
 
-        parquet.createOrReplaceTempView("tableName1");
-        System.out.println("-------------------parquet----------------------------");
-//
-        sparkSession.sql("SELECT *  FROM tableName1").show();
-    }
 
-
-    public static void outPuttoParquet(String predicate1,  SparkSession sparkSession) throws IOException {
+    public static void tranformCSVtoParquet(String predicate1,String inputCSVPath,String  outputParquetPath, SparkSession sparkSession) throws IOException {
         //Read csv from HDFS
-        Dataset<Row> df1 = sparkSession.read().csv("hdfs://master:8020/test/temp11/" + predicate1 + ".csv");
+        Dataset<Row> df1 = sparkSession.read().csv(inputCSVPath + predicate1 + ".csv");
 
         //Write parquet to HDFS
         df1.write().parquet(outputParquetPath + predicate1);
@@ -76,8 +60,8 @@ public class RdfTesting {
             }
 
 
-        Dataset<Row> sqlDF =sparkSession.sql("SELECT * FROM parquet.`"+outputParquetPath+predicate1+"/"+predicate1 + ".parquet"+"`");
-        sqlDF.show();
+//        Dataset<Row> sqlDF =sparkSession.sql("SELECT * FROM parquet.`"+outputParquetPath+predicate1+"/"+predicate1 + ".parquet"+"`");
+//        sqlDF.show();
 
 
         }

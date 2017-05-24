@@ -1,15 +1,11 @@
 package rdf;
 
 import org.apache.spark.sql.AnalysisException;
-import org.apache.spark.sql.Dataset;
-import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 
 import java.io.IOException;
 
-import rdf.basicGraphPatterns.*;
-import rdf.joins.RdfJoins;
-import rdf.joins.RdfTesting;
+import utils.RdfTrasformation;
 
 /**
  * Created by tsotzolas on 02/05/2017.
@@ -68,9 +64,10 @@ public class RDFReading {
 //        RdfJoins.findSubjectObjectJoin("likes","follows","i2","b",sparkSession);
 
 
-        RdfTesting.testParquet("likes",sparkSession);
-
-        RdfTesting.outPuttoParquet("0",sparkSession);
+//        RdfTesting.testParquet("likes",sparkSession);
+        String inputCSVPath = "/usr/lib/spark/bin/RDF/RDF/";
+        String outputParquetPath = "hdfs://master:8020/test/temp11/";
+        RdfTrasformation.tranformCSVtoParquet("0",inputCSVPath,outputParquetPath,sparkSession);
     }
 
 }
