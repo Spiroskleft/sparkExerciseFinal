@@ -1,8 +1,5 @@
 package utils;
 
-import org.apache.hadoop.hdfs.protocol.DirectoryListing;
-import rdf.RDFReading;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -12,38 +9,47 @@ import java.util.Properties;
  */
 public class ReadPropertiesFile {
 
-    public static String readRDFDataInputPath() throws IOException {
-    Properties prop = new Properties();
-    InputStream input = null;
-    String inputPath = "";
-        try {
-            input = RDFReading.class.getClassLoader().getResourceAsStream("config.properties");
-            prop.load(input);
-            //Getting the setting from the property file
-            inputPath = prop.getProperty("RDFDataInputPath");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+private static InputStream inputConfig = ReadPropertiesFile.class.getClassLoader().getResourceAsStream("config.properties");
+private static InputStream inputRun = ReadPropertiesFile.class.getClassLoader().getResourceAsStream("run.properties");
 
-        return inputPath;
-    }
-
-
-    public static String readHDFSDataInputPath() throws IOException {
+    /**
+     * Μέθοδος όπου διαβάσει απο το config.properties και επιστρέφει την τιμή σύμφωνα με το param
+     * @param propertyName είναι το όνομα του P
+     * @return  την τιμή του property απο το config.properties αρχείο
+     * @throws IOException
+     */
+    public static String readConfigProperty(String propertyName) throws IOException {
         Properties prop = new Properties();
-        InputStream input = null;
-        String inputPath = "";
+        String returnedProperty = "";
         try {
-            input = RDFReading.class.getClassLoader().getResourceAsStream("config.properties");
-            prop.load(input);
+            prop.load(inputConfig);
             //Getting the setting from the property file
-            inputPath = prop.getProperty("HDFSDataPath").toString();
+            returnedProperty = prop.getProperty(propertyName);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return inputPath;
+        return returnedProperty;
     }
+
+    /**
+     * Μέθοδος όπου διαβάσει απο το config.properties και επιστρέφει την τιμή σύμφωνα με το param
+     * @param propertyName είναι το όνομα του P
+     * @return  την τιμή του property απο το config.properties αρχείο
+     * @throws IOException
+     */
+    public static String readRunProperty(String propertyName) throws IOException {
+        Properties prop = new Properties();
+        String returnedProperty = "";
+        try {
+            prop.load(inputRun);
+            //Getting the setting from the property file
+            returnedProperty = prop.getProperty(propertyName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return returnedProperty;
+    }
+
 
 
 }

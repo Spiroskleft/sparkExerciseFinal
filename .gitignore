@@ -1,0 +1,5 @@
+.idea/*
+target/
+sparkExerciseFinal.iml
+dependency-reduced-pom.xml
+src/test/
