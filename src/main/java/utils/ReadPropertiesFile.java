@@ -1,9 +1,5 @@
 package utils;
 
-import org.apache.hadoop.hdfs.protocol.DirectoryListing;
-import rdf.RDFReading;
-import rdf.joins.RdfJoins;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -12,45 +8,48 @@ import java.util.Properties;
  * Created by tsotzo on 14/5/2017.
  */
 public class ReadPropertiesFile {
-private static InputStream input = ReadPropertiesFile.class.getClassLoader().getResourceAsStream("config.properties");
-    public static String readRDFDataInputPath() throws IOException {
+
+private static InputStream inputConfig = ReadPropertiesFile.class.getClassLoader().getResourceAsStream("config.properties");
+private static InputStream inputRun = ReadPropertiesFile.class.getClassLoader().getResourceAsStream("run.properties");
+
+    /**
+     * Μέθοδος όπου διαβάσει απο το config.properties και επιστρέφει την τιμή σύμφωνα με το param
+     * @param propertyName είναι το όνομα του P
+     * @return  την τιμή του property απο το config.properties αρχείο
+     * @throws IOException
+     */
+    public static String readConfigProperty(String propertyName) throws IOException {
         Properties prop = new Properties();
-        String inputPath = "";
+        String returnedProperty = "";
         try {
-            prop.load(input);
+            prop.load(inputConfig);
             //Getting the setting from the property file
-            inputPath = prop.getProperty("RDFDataInputPath");
+            returnedProperty = prop.getProperty(propertyName);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return inputPath;
+        return returnedProperty;
     }
 
-
-    public static String readHDFSDataInputPath() throws IOException {
+    /**
+     * Μέθοδος όπου διαβάσει απο το config.properties και επιστρέφει την τιμή σύμφωνα με το param
+     * @param propertyName είναι το όνομα του P
+     * @return  την τιμή του property απο το config.properties αρχείο
+     * @throws IOException
+     */
+    public static String readRunProperty(String propertyName) throws IOException {
         Properties prop = new Properties();
-        String inputPath = "";
+        String returnedProperty = "";
         try {
-            input = RDFReading.class.getClassLoader().getResourceAsStream("config.properties");
-            prop.load(input);
+            prop.load(inputRun);
             //Getting the setting from the property file
-            inputPath = prop.getProperty("HDFSDataPath").toString();
+            returnedProperty = prop.getProperty(propertyName);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return inputPath;
+        return returnedProperty;
     }
 
-    public static String ReadFilePath() throws IOException {
-        Properties prop = new Properties();
-        String outputQueries;
-        // load a properties file
-        prop.load(input);
-        outputQueries = prop.getProperty("outputQueries");
-        return outputQueries;
-    }
 
 
 }

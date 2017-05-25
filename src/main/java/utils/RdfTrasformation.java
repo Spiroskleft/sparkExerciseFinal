@@ -5,54 +5,30 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.semanticweb.yars.nx.Node;
 import org.semanticweb.yars.nx.parser.NxParser;
-
 import java.io.*;
 import java.util.*;
+
+import static utils.ReadPropertiesFile.readConfigProperty;
 
 /**
  * Created by tsotzo on 15/5/2017.
  */
 public class RdfTrasformation {
-    private  static String dataset = "";
-    private  static String outputPath = "";
-    private  static String dictionaryFileName = "";
-    private  static Boolean writeDataToHDFS = false;
 
-    //Για το HDFS
-    private static String inputHDFSpath = "";
-    private static String outputHDFSpath = "";
-    private  static String filesTypes = "";
-
-
-
-    public static void  parceTxtToVP(SparkSession sparkSession) throws IOException {
-        //Διαβάσουμε απο το properties file
-        Properties prop = new Properties();
-        InputStream input = null;
-        input = RdfTrasformation.class.getClassLoader().getResourceAsStream("config.properties");
-
-
-        // load a properties file
-        prop.load(input);
-
-        dataset = prop.getProperty("dataset");
-        outputPath = prop.getProperty("outputPath");
-        dictionaryFileName = prop.getProperty("dictionaryFileName");
-        filesTypes = prop.getProperty("filesTypes");
-
-
-        inputHDFSpath = prop.getProperty("inputHDFSpath");
-        outputHDFSpath = prop.getProperty("outputHDFSpath");
-        writeDataToHDFS = Boolean.valueOf(prop.getProperty("writeDataToHDFS"));
+    /**
+     * Μετατράπει αρχεία RDF σε Vertical Partitioning
+     * Θα πρέπει να γίνουν οι ρυθμήσεις των φακέλων στο config.properties
+     * @throws IOException
+     */
+    public static void  parceTxtToVP() throws IOException {
 
         //Είναι το αρχείο το οποίο θέλεμε να εξετάσουμε
-        FileInputStream is = new FileInputStream(dataset);
+        FileInputStream is = new FileInputStream(readConfigProperty("dataset"));
 
         //Χρησιμοποιούμε έναν κατάλληλο Parser
         //https://github.com/nxparser/nxparser
@@ -118,7 +94,7 @@ public class RdfTrasformation {
             String content = list.get(i).getSubject() + "," + list.get(i).getObject() + "\n";
 
             //Γράφω σε αρχείο τα αποτελέσματα
-            writeInFile(outputPath, content, fileName, filesTypes);
+            writeInFile(readConfigProperty("outputPath"), content, fileName, readConfigProperty("filesTypes"));
 
         }
         //Γράφουμε το Map που είναι το Dictionary σε αρχείο
@@ -131,13 +107,21 @@ public class RdfTrasformation {
         System.out.println("Done");
 
         //Άμα έχουμε επιλέξει να γράψουμε το αρχείο στο HDFS το αποθηκεύουμε
-        if(writeDataToHDFS) {
-            HdfsWriter.writeToHDFS(inputHDFSpath, outputHDFSpath);
+        if(Boolean.valueOf(readConfigProperty("writeDataToHDFS"))) {
+            HdfsWriter.writeToHDFS(readConfigProperty("inputHDFSpath"), readConfigProperty("outputHDFSpath"));
         }
 
     }
 
 
+    /**
+     * Μετατρέπει ένα CSV file σε μορφή Parquet
+     * @param predicate1 είναι το όνομα του CSV αρχείου
+     * @param inputCSVPath είναι το path όπου είναι το CSV αρχείο
+     * @param outputParquetPath είναι το path όπου θέλουμε να αποθηκεύσουμε το Parquet αρχείο
+     * @param sparkSession Είναι το session του Spark το οποίο έχουμε
+     * @throws IOException
+     */
     public static void tranformCSVtoParquet(String predicate1,String inputCSVPath,String  outputParquetPath, SparkSession sparkSession) throws IOException {
         //Read csv from HDFS
         Dataset<Row> df1 = sparkSession.read().csv(inputCSVPath + predicate1 + ".csv");
@@ -150,7 +134,7 @@ public class RdfTrasformation {
         Configuration myConf = new Configuration();
 
         // Ορίζουμε το path του hdfs
-        myConf.set("fs.defaultFS", "hdfs://master:8020");
+        myConf.set("fs.defaultFS", readConfigProperty("HDFSMasterConf"));
 
         FileSystem fs = FileSystem.get(myConf);
         FileStatus afs[] = fs.listStatus(new Path(outputParquetPath+predicate1));
@@ -200,12 +184,8 @@ public class RdfTrasformation {
         } catch (Exception e ){
             e.printStackTrace();
         }
-
-        //Άμα έχουμε επιλέξει να γράψουμε το αρχείο στο HDFS το αποθηκεύουμε
-        if(writeDataToHDFS) {
             //Γράφουμε το αρχείο
-            writeInFile(outputPath, sb.toString(), dictionaryFileName, filesTypes);
-        }
+            writeInFile(readConfigProperty("outputPath"), sb.toString(), readConfigProperty("dictionaryFileName"), readConfigProperty("filesTypes"));
     }
 
 
@@ -236,8 +216,6 @@ public class RdfTrasformation {
                 fop.flush();
                 fop.close();
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -245,7 +223,6 @@ public class RdfTrasformation {
                 if (fop != null) {
                     fop.close();
                 }
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

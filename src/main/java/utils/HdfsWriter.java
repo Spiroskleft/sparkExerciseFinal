@@ -62,16 +62,12 @@ public class HdfsWriter {
 
 
     /**
-     * Created by Spiroskleft@gmail.com on 8/5/2017.
      * Αυτή η μέθοδος αντιγράφει αρχεία απο έναν φάκελο στο τοπικό file system στο HDFS
-     *
      * @param inputHDFSpath  Είναι το path απο την οποία θα διαβάζει τα αρχεία προς αντιγραφή
      * @param outputHDFSpath Είναι το path στο HDFS στο οποίο θα γράφει τα αρχεία
      * @throws IOException
      */
     public static void renameToHDFS(String inputHDFSpath, String outputHDFSpath) throws IOException {
-
-
         // Ορίζουμε το αρχείο στο local file system
         String uri = inputHDFSpath;
         InputStream in = null;
@@ -100,19 +96,6 @@ public class HdfsWriter {
                 else {
                     fs.rename(aFile.getPath(), new Path("0.parquet"));
                 }
-
-//        FileUtil.
-//            OutputStream os = fSystem.create(outputPath);
-//            try{
-//                InputStream is = new BufferedInputStream(new FileInputStream(uri));
-//                IOUtils.copyBytes(is, os, 4096, false);
-//            }
-//            catch(IOException e){
-//                e.printStackTrace();
-//            }
-//            finally{
-//                IOUtils.closeStream(in);
-//            }
             }
 
         }

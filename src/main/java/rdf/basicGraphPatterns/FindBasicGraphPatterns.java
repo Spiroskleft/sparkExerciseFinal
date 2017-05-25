@@ -4,22 +4,16 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 //
-import rdf.joins.RdfJoins;
-import utils.ReadPropertiesFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Objects;
-import java.util.Properties;
 
-import static org.apache.hadoop.hdfs.server.namenode.ListPathsServlet.df;
+import static utils.ReadPropertiesFile.readConfigProperty;
 //import utils.ReadPropertiesFile.inputPath;
 
 
 
-/**
- * Created by tsotzo on 14/5/2017.
- */
+
 public class FindBasicGraphPatterns {
 
 private static String outputQueries ="";
@@ -39,12 +33,12 @@ private static String outputQueries ="";
        if (Objects.equals(type, "csv")) {
            //The predicate will tell us the file that we must take
            //Φορτώνουμε το αρχειο σε ένα Dataset
-           df= sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath()+ predicate + ".csv");
+           df= sparkSession.read().csv(readConfigProperty("RDFDataInputPath")+ predicate + ".csv");
        }
        else if (Objects.equals(type, "parquet")) {
            //The predicate will tell us the file that we must take
            //Φορτώνουμε το αρχειο σε ένα Dataset
-           df= sparkSession.read().parquet(ReadPropertiesFile.readRDFDataInputPath() + predicate + ".parquet");
+           df= sparkSession.read().parquet(readConfigProperty("RDFDataInputPath" + predicate + ".parquet"));
        }
        else {
            System.out.println("Wrong file type, Select 'csv' or 'parquet' as a parameter");
@@ -57,7 +51,7 @@ private static String outputQueries ="";
                 "where _c1='" + object + "'").show();
 
         // Γράφουμε το query σε output file που έχουμε καθορίσει στο config.properties
-        df.write().text(ReadPropertiesFile.ReadFilePath());
+        df.write().text(readConfigProperty("outputBGP"));
     }
 
 
@@ -75,12 +69,12 @@ private static String outputQueries ="";
         if (Objects.equals(type, "csv")) {
             //The predicate will tell us the file that we must take
             //Φορτώνουμε το αρχειο σε ένα Dataset
-            df= sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath()+ predicate + ".csv");
+            df= sparkSession.read().csv(readConfigProperty("RDFDataInputPath")+ predicate + ".csv");
         }
         else if (Objects.equals(type, "parquet")) {
             //The predicate will tell us the file that we must take
             //Φορτώνουμε το αρχειο σε ένα Dataset
-            df= sparkSession.read().parquet(ReadPropertiesFile.readRDFDataInputPath() + predicate + ".parquet");
+            df= sparkSession.read().parquet(readConfigProperty("RDFDataInputPath") + predicate + ".parquet");
         }
         else {
             System.out.println("Wrong file type, Select 'csv' or 'parquet' as a parameter");
@@ -94,7 +88,7 @@ private static String outputQueries ="";
                 "where _c0='" + subject + "'").show();
 
         // Γράφουμε το query σε output file που έχουμε καθορίσει στο config.properties
-        df.write().text(ReadPropertiesFile.ReadFilePath());
+        df.write().text(readConfigProperty("outputBGP"));
     }
 
     /**
@@ -111,12 +105,12 @@ private static String outputQueries ="";
         if (Objects.equals(type, "csv")) {
             //The predicate will tell us the file that we must take
             //Φορτώνουμε το αρχειο σε ένα Dataset
-            df= sparkSession.read().csv(ReadPropertiesFile.readRDFDataInputPath()+ predicate + ".csv");
+            df= sparkSession.read().csv(readConfigProperty("RDFDataInputPath")+ predicate + ".csv");
         }
         else if (Objects.equals(type, "parquet")) {
             //The predicate will tell us the file that we must take
             //Φορτώνουμε το αρχειο σε ένα Dataset
-            df= sparkSession.read().parquet(ReadPropertiesFile.readRDFDataInputPath() + predicate + ".parquet");
+            df= sparkSession.read().parquet(readConfigProperty("RDFDataInputPath") + predicate + ".parquet");
         }
         else {
             System.out.println("Wrong file type, Select 'csv' or 'parquet' as a parameter");
@@ -129,7 +123,7 @@ private static String outputQueries ="";
                 "FROM tableName ").show();
 
         // Γράφουμε το query σε output file που έχουμε καθορίσει στο config.properties
-        df.write().text(ReadPropertiesFile.ReadFilePath());
+        df.write().text(readConfigProperty("outputBGP"));
     }
 
 
