@@ -30,6 +30,12 @@ public class RDFReading {
         //Create the Spark session
         sparkSession = SparkSession.builder().appName("RDFreader").getOrCreate();
 
+
+        String inputCSVPath = "/usr/lib/spark/bin/RDF/RDF/";
+        String outputParquetPath = "hdfs://master:8020/test/temp11/";
+        RdfTrasformation.tranformCSVtoParquet("0",inputCSVPath,outputParquetPath,sparkSession);
+
+
         //s1 p1 ?o
 //        FindBasicGraphPatterns.findObject("<http://data.bgs.ac.uk/id/Geochronology/DivisionList/CAA>","0",sparkSession);
 
@@ -65,9 +71,7 @@ public class RDFReading {
 
 
 //        RdfTesting.testParquet("likes",sparkSession);
-        String inputCSVPath = "/usr/lib/spark/bin/RDF/RDF/";
-        String outputParquetPath = "hdfs://master:8020/test/temp11/";
-        RdfTrasformation.tranformCSVtoParquet("0",inputCSVPath,outputParquetPath,sparkSession);
+
     }
 
 }
