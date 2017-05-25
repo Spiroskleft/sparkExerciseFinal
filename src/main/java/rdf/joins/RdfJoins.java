@@ -102,9 +102,9 @@ private static String pathForJoinsParquet = "";
      * @param predicate1
      * @param predicate2
      * @param type
-     * @param path
+     *
      */
-    public static void findObjectObjectJoin(String predicate1, String predicate2, String subject1, String subject2, SparkSession sparkSession, String type, String path) throws AnalysisException, IOException {
+    public static void findObjectObjectJoin(String predicate1, String predicate2, String subject1, String subject2, SparkSession sparkSession, String type) throws AnalysisException, IOException {
 
         Dataset<Row> dfa = null;
         Dataset<Row> dfb = null;
@@ -116,16 +116,16 @@ private static String pathForJoinsParquet = "";
 
         if (Objects.equals(type, "csv")) {
 
-            path = pathForJoinsCSV ;
-            dfa = sparkSession.read().csv(path + predicate1 + ".csv");
-            dfb = sparkSession.read().csv(path + predicate2 + ".csv");
+
+            dfa = sparkSession.read().csv(pathForJoinsCSV + predicate1 + ".csv");
+            dfb = sparkSession.read().csv(pathForJoinsCSV + predicate2 + ".csv");
 
         }
         else if (Objects.equals(type, "parquet")) {
 
-            path = pathForJoinsParquet;
-            dfa = sparkSession.read().parquet(path+ predicate1 + ".parquet");
-            dfb = sparkSession.read().parquet(path + predicate2 + ".parquet");
+
+            dfa = sparkSession.read().parquet(pathForJoinsParquet+ predicate1 + ".parquet");
+            dfb = sparkSession.read().parquet(pathForJoinsParquet + predicate2 + ".parquet");
         }
 
         else {
@@ -165,9 +165,9 @@ private static String pathForJoinsParquet = "";
      * @param predicate1
      * @param predicate2
      * @param type
-     * @param path
+
      */
-    public static void findObjectSubjectJoin(String predicate1, String predicate2, String subject1, String object2, SparkSession sparkSession, String type, String path) throws AnalysisException, IOException {
+    public static void findObjectSubjectJoin(String predicate1, String predicate2, String subject1, String object2, SparkSession sparkSession, String type) throws AnalysisException, IOException {
 
         Dataset<Row> df3 = null;
         Dataset<Row> df4 = null;
@@ -179,16 +179,16 @@ private static String pathForJoinsParquet = "";
 
         if (Objects.equals(type, "csv")) {
 
-            path = pathForJoinsCSV ;
-            df3 = sparkSession.read().csv(path + predicate1 + ".csv");
-            df4 = sparkSession.read().csv(path + predicate2 + ".csv");
+
+            df3 = sparkSession.read().csv(pathForJoinsCSV + predicate1 + ".csv");
+            df4 = sparkSession.read().csv(pathForJoinsCSV + predicate2 + ".csv");
 
         }
         else if (Objects.equals(type, "parquet")) {
 
-            path = pathForJoinsParquet;
-            df3 = sparkSession.read().parquet(path+ predicate1 + ".parquet");
-            df4 = sparkSession.read().parquet(path + predicate2 + ".parquet");
+
+            df3 = sparkSession.read().parquet(pathForJoinsParquet+ predicate1 + ".parquet");
+            df4 = sparkSession.read().parquet(pathForJoinsParquet + predicate2 + ".parquet");
         }
 
         else {
@@ -223,7 +223,7 @@ private static String pathForJoinsParquet = "";
      * @param predicate1
      * @param predicate2
      */
-    public static void findSubjectObjectJoin(String predicate1, String predicate2,  String object1,String subject2, SparkSession sparkSession, String type,String path) throws AnalysisException, IOException {
+    public static void findSubjectObjectJoin(String predicate1, String predicate2,  String object1,String subject2, SparkSession sparkSession, String type) throws AnalysisException, IOException {
 
         Dataset<Row> df1 = null;
         Dataset<Row> df2 = null;
@@ -235,16 +235,16 @@ private static String pathForJoinsParquet = "";
 
         if (Objects.equals(type, "csv")) {
 
-            path = pathForJoinsCSV ;
-            df1 = sparkSession.read().csv(path + predicate1 + ".csv");
-            df2 = sparkSession.read().csv(path + predicate2 + ".csv");
+
+            df1 = sparkSession.read().csv(pathForJoinsCSV + predicate1 + ".csv");
+            df2 = sparkSession.read().csv(pathForJoinsCSV + predicate2 + ".csv");
 
         }
         else if (Objects.equals(type, "parquet")) {
 
-            path = pathForJoinsParquet;
-            df1 = sparkSession.read().parquet(path+ predicate1 + ".parquet");
-            df2 = sparkSession.read().parquet(path + predicate2 + ".parquet");
+
+            df1 = sparkSession.read().parquet(pathForJoinsParquet+ predicate1 + ".parquet");
+            df2 = sparkSession.read().parquet(pathForJoinsParquet + predicate2 + ".parquet");
         }
 
         else {
