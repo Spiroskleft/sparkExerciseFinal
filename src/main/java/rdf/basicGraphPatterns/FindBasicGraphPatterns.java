@@ -4,20 +4,25 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 //
+import rdf.joins.RdfJoins;
 import utils.ReadPropertiesFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
+import java.util.Properties;
 
 import static org.apache.hadoop.hdfs.server.namenode.ListPathsServlet.df;
 //import utils.ReadPropertiesFile.inputPath;
+
+
 
 /**
  * Created by tsotzo on 14/5/2017.
  */
 public class FindBasicGraphPatterns {
 
-
+private static String outputQueries ="";
     /**
      * Working with triples (s,p,o)
      * when triples in verticalPartitioning (VP)
@@ -26,6 +31,7 @@ public class FindBasicGraphPatterns {
      * @param object
      * @param predicate
      * @param type
+
      */
     public static void findSubject(String object, String predicate, SparkSession sparkSession, String type) throws IOException {
         Dataset<Row> df = null;
@@ -49,6 +55,9 @@ public class FindBasicGraphPatterns {
         sparkSession.sql("SELECT _c0 as subject " +
                 "FROM tableName " +
                 "where _c1='" + object + "'").show();
+
+        // Γράφουμε το query σε output file που έχουμε καθορίσει στο config.properties
+        df.write().text(ReadPropertiesFile.ReadFilePath());
     }
 
 
@@ -63,7 +72,6 @@ public class FindBasicGraphPatterns {
      */
     public static void findObject(String subject, String predicate, SparkSession sparkSession, String type) throws IOException {
         Dataset<Row> df = null;
-
         if (Objects.equals(type, "csv")) {
             //The predicate will tell us the file that we must take
             //Φορτώνουμε το αρχειο σε ένα Dataset
@@ -84,6 +92,9 @@ public class FindBasicGraphPatterns {
         sparkSession.sql("SELECT _c1 as object " +
                 "FROM tableName " +
                 "where _c0='" + subject + "'").show();
+
+        // Γράφουμε το query σε output file που έχουμε καθορίσει στο config.properties
+        df.write().text(ReadPropertiesFile.ReadFilePath());
     }
 
     /**
@@ -116,5 +127,10 @@ public class FindBasicGraphPatterns {
         //Κάνουμε προβολή των δεδομένων
         sparkSession.sql("SELECT _c0 as subject , _c1 as object " +
                 "FROM tableName ").show();
+
+        // Γράφουμε το query σε output file που έχουμε καθορίσει στο config.properties
+        df.write().text(ReadPropertiesFile.ReadFilePath());
     }
+
+
 }
