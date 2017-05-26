@@ -62,6 +62,9 @@ public class RdfJoins {
                 " where tableName1._c1='" + object1 + "'" +
                 " and tableName1._c0=tableName2._c0" +
                 " and tableName2._c1='" + object2 + "'").show();
+
+
+
     }
 
 
