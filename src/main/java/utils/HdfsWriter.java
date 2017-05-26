@@ -12,6 +12,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import static utils.ReadPropertiesFile.*;
 
 public class HdfsWriter {
 
@@ -40,7 +41,7 @@ public class HdfsWriter {
         Path outputPath = new Path(outputHDFSpath);
 
         // Ορίζουμε το path του hdfs
-        myConf.set("fs.defaultFS", "hdfs://master:8020");
+        myConf.set("fs.defaultFS", readConfigProperty("HDFSMasterConf"));
 
         // Δημιουργία του output (του αρχείου Hdfs)
 
@@ -77,13 +78,13 @@ public class HdfsWriter {
         Configuration myConf = new Configuration();
 
         // Ορίζουμε το path του hdfs
-        myConf.set("fs.defaultFS", "hdfs://master:8020");
+        myConf.set("fs.defaultFS", readConfigProperty("HDFSMasterConf"));
 
         // Δημιουργία του output (του αρχείου Hdfs)
 
         FileSystem fs = FileSystem.get(myConf);
-        fs.mkdirs(new Path("/testP/"));
-        FileStatus afs[] = fs.listStatus(new Path("hdfs://master:8020/test/temp111/"));
+//        fs.mkdirs(new Path("/testP/"));
+        FileStatus afs[] = fs.listStatus(new Path(readConfigProperty("HDFSMasterConf")+readConfigProperty("parquetHDFSFolder")));
 
         for (FileStatus aFile : afs) {
             if (aFile.isDir()) {
@@ -94,7 +95,7 @@ public class HdfsWriter {
                     fs.delete(aFile.getPath(), true);
 // delete all log files and the _SUCCESS file in the output directory
                 else {
-                    fs.rename(aFile.getPath(), new Path("0.parquet"));
+                    fs.rename(aFile.getPath(), new Path(readConfigProperty("CSVFileName")+".parquet"));
                 }
             }
 

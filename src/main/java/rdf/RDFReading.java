@@ -34,7 +34,7 @@ public class RDFReading {
         }
 
         if ("true".equals(readRunProperty("tranformCSVtoParquet"))) {
-            RdfTrasformation.tranformCSVtoParquet("0", readConfigProperty("inputCSVPath"), readConfigProperty("outputParquetPath"), sparkSession);
+            RdfTrasformation.tranformCSVtoParquet(readConfigProperty("CSVFileName"), readConfigProperty("inputCSVPath"), readConfigProperty("outputParquetPath"), sparkSession);
         }
 
 
