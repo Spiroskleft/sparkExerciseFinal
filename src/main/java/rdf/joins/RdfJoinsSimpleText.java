@@ -19,7 +19,7 @@ public class RdfJoinsSimpleText {
 
     /**
      * Working with triples (s,p,o)
-     * when triples in verticalPartitioning (VP)
+     * when triples in plain text
      * ?s p1 o1
      * ?s p2 o2
      * Και στο παράδειγμα των follows και likes

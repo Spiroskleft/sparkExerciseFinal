@@ -76,7 +76,7 @@ public class RDFReading {
             RdfJoins.findObjectObjectJoin(readConfigProperty("predicate1OO")
                     , readConfigProperty("predicate2OO")
                     , readConfigProperty("subject1OO")
-                    , readConfigProperty("subject1OO")
+                    , readConfigProperty("subject2OO")
                     , sparkSession
                     , readConfigProperty("joinInputFileType"));
 
