@@ -61,29 +61,48 @@ public class RDFReading {
             //?s p1 o1
             //?s p2 o2
             //Πρέπει να βγάλει a
-            RdfJoins.findSubjectSubjectJoin("follows", "likes", "b", "i1", sparkSession, readConfigProperty("joinInputFileType"));
+            RdfJoins.findSubjectSubjectJoin(readConfigProperty("predicate1SS")
+                    , readConfigProperty("predicate2SS")
+                    , readConfigProperty("object1SS")
+                    , readConfigProperty("object2SS")
+                    , sparkSession
+                    , readConfigProperty("joinInputFileType"));
         }
 
         if ("true".equals(readRunProperty("findObjectObjectJoin"))) {
             //s1 p1 ?o
             //s2 p1 ?o
             //Πρέπει να βγάλει a
-            RdfJoins.findObjectObjectJoin("follows", "follows", "a", "c", sparkSession, readConfigProperty("joinInputFileType"));
+            RdfJoins.findObjectObjectJoin(readConfigProperty("predicate1OO")
+                    , readConfigProperty("predicate2OO")
+                    , readConfigProperty("subject1OO")
+                    , readConfigProperty("subject1OO")
+                    , sparkSession
+                    , readConfigProperty("joinInputFileType"));
+
         }
 
         if ("true".equals(readRunProperty("findObjectSubjectJoin"))) {
             //s1 p1 ?o
             //?s p2 o2
             //Πρέπει να βγάλει c
-            RdfJoins.findObjectSubjectJoin("follows", "likes", "b", "i2", sparkSession, readConfigProperty("joinInputFileType"));
+            RdfJoins.findObjectSubjectJoin(readConfigProperty("predicate1OS")
+                    , readConfigProperty("predicate2OS")
+                    , readConfigProperty("subject1OS")
+                    , readConfigProperty("object2OS")
+                    , sparkSession, readConfigProperty("joinInputFileType"));
         }
 
 
         if ("true".equals(readRunProperty("findObjectSubjectJoin"))) {
             //?s p2 o2
             //s1 p1 ?o
-            //Πρέπει να βγάλει c
-        RdfJoins.findSubjectObjectJoin("likes","follows","i2","b",sparkSession,readConfigProperty("joinInputFileType"));
+        RdfJoins.findSubjectObjectJoin(readConfigProperty("predicate1SO")
+                ,readConfigProperty("predicate2SO")
+                ,readConfigProperty("object1SO")
+                ,readConfigProperty("subject2SO")
+                ,sparkSession
+                ,readConfigProperty("joinInputFileType"));
         }
     }
 
