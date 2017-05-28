@@ -117,7 +117,7 @@ public class RDFReading {
                     , readConfigProperty("file2SSSimpleText")
                     , readConfigProperty("predicate1SSSimpleText")
                     , readConfigProperty("predicate2SSSimpleText")
-                    , readConfigProperty("object2SSSimpleText")
+                    , readConfigProperty("object1SSSimpleText")
                     , readConfigProperty("object2SSSimpleText")
                     , sparkSession
                     , readConfigProperty("joinInputFileTypeSimpleText"));

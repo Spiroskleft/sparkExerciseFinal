@@ -46,12 +46,12 @@ public class RdfJoinsSimpleText {
         //Φορτώνουμε το κάθε αρχείο σε ένα Dataset αναλόγως με το αν είναι csv ή parquet
         if (Objects.equals(type, "csv")) {
 
-            df1 = sparkSession.read().csv(readConfigProperty("pathForJoinsCSV") + file1 + ".csv");
-            df2 = sparkSession.read().csv(readConfigProperty("pathForJoinsCSV") + file2 + ".csv");
+            df1 = sparkSession.read().csv(readConfigProperty("pathForJoinsCSVSimpleText") + file1 + ".csv");
+            df2 = sparkSession.read().csv(readConfigProperty("pathForJoinsCSVSimpleText") + file2 + ".csv");
         } else if (Objects.equals(type, "parquet")) {
 
-            df1 = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquet") + file1 + ".parquet");
-            df2 = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquet") + file2 + ".parquet");
+            df1 = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquetSimpleText") + file1 + ".parquet");
+            df2 = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquetSimpleText") + file2 + ".parquet");
         } else {
             System.out.println("Wrong File Type as a Parameter, Select 'csv' or 'parquet' ");
         }
@@ -100,12 +100,12 @@ public class RdfJoinsSimpleText {
         Dataset<Row> dfb = null;
         //Φορτώνουμε το κάθε αρχείο σε ένα Dataset αναλόγως με το αν είναι csv ή parquet
         if (Objects.equals(type, "csv")) {
-            dfa = sparkSession.read().csv(readConfigProperty("pathForJoinsCSV") + file1 + ".csv");
-            dfb = sparkSession.read().csv(readConfigProperty("pathForJoinsCSV") + file2 + ".csv");
+            dfa = sparkSession.read().csv(readConfigProperty("pathForJoinsCSVSimpleText") + file1 + ".csv");
+            dfb = sparkSession.read().csv(readConfigProperty("pathForJoinsCSVSimpleText") + file2 + ".csv");
         }
         else if (Objects.equals(type, "parquet")) {
-            dfa = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquet") + file1 + ".parquet");
-            dfb = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquet") + file2 + ".parquet");
+            dfa = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquetSimpleText") + file1 + ".parquet");
+            dfb = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquetSimpleText") + file2 + ".parquet");
         }
         else {
             System.out.println("Wrong File Type as a Parameter, Select 'csv' or 'parquet' ");
@@ -151,12 +151,12 @@ public class RdfJoinsSimpleText {
 
         //Φορτώνουμε το κάθε αρχείο σε ένα Dataset αναλόγως με το αν είναι csv ή parquet
         if (Objects.equals(type, "csv")) {
-            df3 = sparkSession.read().csv(readConfigProperty("pathForJoinsCSV") + file1 + ".csv");
-            df4 = sparkSession.read().csv(readConfigProperty("pathForJoinsCSV") + file2 + ".csv");
+            df3 = sparkSession.read().csv(readConfigProperty("pathForJoinsCSVSimpleText") + file1 + ".csv");
+            df4 = sparkSession.read().csv(readConfigProperty("pathForJoinsCSVSimpleText") + file2 + ".csv");
         }
         else if (Objects.equals(type, "parquet")) {
-            df3 = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquet")+ file1 + ".parquet");
-            df4 = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquet") + file2 + ".parquet");
+            df3 = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquetSimpleText")+ file1 + ".parquet");
+            df4 = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquetSimpleText") + file2 + ".parquet");
         }
         else {
             System.out.println("Wrong File Type as a Parameter, Select 'csv' or 'parquet' ");
@@ -200,12 +200,12 @@ public class RdfJoinsSimpleText {
 
         //Φορτώνουμε το κάθε αρχείο σε ένα Dataset αναλόγως με το αν είναι csv ή parquet
         if (Objects.equals(type, "csv")) {
-            df1 = sparkSession.read().csv(readConfigProperty("pathForJoinsCSV") + file1 + ".csv");
-            df2 = sparkSession.read().csv(readConfigProperty("pathForJoinsCSV") + file2 + ".csv");
+            df1 = sparkSession.read().csv(readConfigProperty("pathForJoinsCSVSimpleText") + file1 + ".csv");
+            df2 = sparkSession.read().csv(readConfigProperty("pathForJoinsCSVSimpleText") + file2 + ".csv");
         }
         else if (Objects.equals(type, "parquet")) {
-            df1 = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquet")+ file1 + ".parquet");
-            df2 = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquet") + file2 + ".parquet");
+            df1 = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquetSimpleText")+ file1 + ".parquet");
+            df2 = sparkSession.read().parquet(readConfigProperty("pathForJoinsParquetSimpleText") + file2 + ".parquet");
         }
         else {
             System.out.println("Wrong File Type as a Parameter, Select 'csv' or 'parquet' ");
