@@ -167,9 +167,9 @@ public class RdfJoins {
     /**
      * Working with triples (s,p,o)
      * when triples in verticalPartitioning (VP)
-     * Join object-subject (OS)
-     * ?s p2 o2
-     * s1 p1 ?o
+     * Join subject-object (SO)
+     * ?s p1 o1
+     * s2 p2 ?o
      * Απαντά στο ερώτημα πχ με τους follows
      * Ποιοι ακολουθούν τον ?s και ο ?s likes s1
      *
@@ -177,6 +177,7 @@ public class RdfJoins {
      * @param object1
      * @param predicate1
      * @param predicate2
+     * @param type
      */
     public static void findSubjectObjectJoin(String predicate1, String predicate2,  String object1,String subject2, SparkSession sparkSession, String type) throws AnalysisException, IOException {
 
