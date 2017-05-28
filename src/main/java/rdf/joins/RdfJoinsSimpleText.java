@@ -121,7 +121,8 @@ public class RdfJoinsSimpleText {
                 " FROM tableName1 , tableName2 " +
                 " where tableName1._c0='" + subject1 + "'" +
                 " and tableName2._c0='" + subject2 + "'"+
-                " and tableName2._c1='" + predicate1 + "'"+
+                " and tableName1._c1='" + predicate1 + "'"+
+                " and tableName2._c1='" + predicate2 + "'"+
                 " and tableName1._c1=tableName2._c1" +      //Επειδή το p1 είναι κοινό !
                 " and tableName1._c2=tableName2._c2").show();
 
