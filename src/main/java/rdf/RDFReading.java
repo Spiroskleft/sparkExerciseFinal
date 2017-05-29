@@ -148,7 +148,7 @@ public class RDFReading {
                     , readConfigProperty("joinInputFileTypeSimpleText"));
 
         }
-
+//
         if ("true".equals(readRunProperty("findObjectSubjectJoinSimpleText"))) {
             //s1 p1 ?o
             //?s p2 o2

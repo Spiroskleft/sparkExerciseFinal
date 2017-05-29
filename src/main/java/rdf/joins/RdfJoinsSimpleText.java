@@ -192,7 +192,7 @@ public class RdfJoinsSimpleText {
      * @param type
      */
     public static void findSubjectObjectJoin(String file1, String file2 ,String subject2, String object1, String predicate1, String predicate2,  SparkSession sparkSession, String type) throws AnalysisException, IOException {
-
+//
         Dataset<Row> df1 = null;
         Dataset<Row> df2 = null;
 
