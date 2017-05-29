@@ -35,24 +35,35 @@ public class RDFReading {
         }
 
         if ("true".equals(readRunProperty("tranformCSVtoParquet"))) {
-            RdfTrasformation.tranformCSVtoParquet(readConfigProperty("CSVFileName"), readConfigProperty("inputCSVPath"), readConfigProperty("outputParquetPath"), sparkSession);
+            RdfTrasformation.tranformCSVtoParquet(readConfigProperty("CSVFileName")
+                    , readConfigProperty("inputCSVPath")
+                    , readConfigProperty("outputParquetPath")
+                    , sparkSession);
         }
 
 
         //Basic Graph Patterns
         if ("true".equals(readRunProperty("findObject"))) {
             //s1 p1 ?o
-            FindBasicGraphPatterns.findObject("<http://data.bgs.ac.uk/id/Geochronology/DivisionList/CAA>", "0", sparkSession, readConfigProperty("BGPInputFileType"));
+            FindBasicGraphPatterns.findObject(readConfigProperty("findObject_ObjectBGP")
+                    , readConfigProperty("findObject_PredicateBGP")
+                    , sparkSession
+                    , readConfigProperty("BGPInputFileType"));
         }
         if ("true".equals(readRunProperty("findSubject"))) {
             //?s p1 o1
-            FindBasicGraphPatterns.findSubject("<http://www.w3.org/2004/02/skos/core#OrderedCollection>", "0", sparkSession, readConfigProperty("BGPInputFileType"));
+            FindBasicGraphPatterns.findSubject(readConfigProperty("findSubject_SubjectBGP")
+                    , readConfigProperty("findSubject_PredicateBGP")
+                    , sparkSession
+                    , readConfigProperty("BGPInputFileType"));
         }
 
         if ("true".equals(readRunProperty("findSubjectObject"))) {
 
             //?s p1 ?o
-            FindBasicGraphPatterns.findSubjectObject("0", sparkSession, readConfigProperty("BGPInputFileType"));
+            FindBasicGraphPatterns.findSubjectObject(readConfigProperty("findSubjectObject_PredicateBGP")
+                    , sparkSession
+                    , readConfigProperty("BGPInputFileType"));
         }
 
 

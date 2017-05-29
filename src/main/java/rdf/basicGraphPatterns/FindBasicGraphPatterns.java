@@ -123,7 +123,7 @@ private static String outputQueries ="";
                 "FROM tableName ").show();
 
         // Γράφουμε το query σε output file που έχουμε καθορίσει στο config.properties
-        df.write().text(readConfigProperty("outputBGP"));
+//        df.write().text(readConfigProperty("outputBGP"));
     }
 
 
