@@ -115,10 +115,10 @@ public class RDFReading {
 
             RdfJoinsSimpleText.findSubjectSubjectJoin(readConfigProperty("file1SSSimpleText")
                     , readConfigProperty("file2SSSimpleText")
-                    , readConfigProperty("predicate1SSSimpleText")
-                    , readConfigProperty("predicate2SSSimpleText")
                     , readConfigProperty("object1SSSimpleText")
                     , readConfigProperty("object2SSSimpleText")
+                    , readConfigProperty("predicate1SSSimpleText")
+                    , readConfigProperty("predicate2SSSimpleText")
                     , sparkSession
                     , readConfigProperty("joinInputFileTypeSimpleText"));
         }
@@ -129,10 +129,10 @@ public class RDFReading {
             //Πρέπει να βγάλει
             RdfJoinsSimpleText.findObjectObjectJoin(readConfigProperty("file100SimpleText")
                     , readConfigProperty("file200SimpleText")
-                    , readConfigProperty("predicate1OOSimpleText")
-                    , readConfigProperty("predicate2OOSimpleText")
                     , readConfigProperty("subject1OOSimpleText")
                     , readConfigProperty("subject2OOSimpleText")
+                    , readConfigProperty("predicate1OOSimpleText")
+                    , readConfigProperty("predicate2OOSimpleText")
                     , sparkSession
                     , readConfigProperty("joinInputFileTypeSimpleText"));
 
@@ -143,11 +143,11 @@ public class RDFReading {
             //?s p2 o2
             //Πρέπει να βγάλει
             RdfJoinsSimpleText.findObjectSubjectJoin(readConfigProperty("file1OSSimpleText")
+                    , readConfigProperty("subject1OSSimpleText")
+                    , readConfigProperty("object2OSSimpleText")
                     , readConfigProperty("file2OSSimpleText")
                     , readConfigProperty("predicate1OSSimpleText")
                     , readConfigProperty("predicate2OSSimpleText")
-                    , readConfigProperty("subject1OSSimpleText")
-                    , readConfigProperty("object2OSSimpleText")
                     , sparkSession, readConfigProperty("joinInputFileTypeSimpleText"));
         }
 
@@ -157,10 +157,10 @@ public class RDFReading {
             //s1 p1 ?o
             RdfJoinsSimpleText.findSubjectObjectJoin(readConfigProperty("file1SOSimpleText")
                     ,readConfigProperty("file2SOSimpleText")
+                    , readConfigProperty("subject2SOSimpleText")
+                    , readConfigProperty("object1SOSimpleText")
                     ,readConfigProperty("predicate1SOSimpleText")
                     ,readConfigProperty("predicate2SOSimpleText")
-                    , readConfigProperty("object1SOSimpleText")
-                    , readConfigProperty("subject2SOSimpleText")
                     ,sparkSession
                     ,readConfigProperty("joinInputFileTypeSimpleText"));
         }
