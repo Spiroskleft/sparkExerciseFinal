@@ -224,4 +224,6 @@ public class RdfJoinsSimpleText {
                 " and tableName1._c0=tableName2._c2" +
                 " and tableName2._c0='" + subject2 + "'").show();
     }
+
+    // End Of Simple Text Joins
 }
