@@ -2,6 +2,7 @@ package rdf;
 
 import org.apache.spark.sql.AnalysisException;
 import org.apache.spark.sql.SparkSession;
+import rdf.basicGraphPatterns.FindBGPSimpleText;
 import rdf.basicGraphPatterns.FindBasicGraphPatterns;
 import rdf.joins.RdfJoins;
 import rdf.joins.RdfJoinsSimpleText;
@@ -42,7 +43,7 @@ public class RDFReading {
         }
 
 
-        //Basic Graph Patterns
+        //Basic Graph Patterns with VP
         if ("true".equals(readRunProperty("findObject"))) {
             //s1 p1 ?o
             FindBasicGraphPatterns.findObject(readConfigProperty("findObject_ObjectBGP")
@@ -66,6 +67,61 @@ public class RDFReading {
                     , readConfigProperty("BGPInputFileType"));
         }
 
+        //Basic Graph Patterns with Simple Text File
+        //------------------------------------------
+        if ("true".equals(readRunProperty("findObjectSimpleText"))) {
+            //s1 p1 ?o
+            FindBGPSimpleText.findObject(readConfigProperty("findObject_FileBGPSimpleText")
+                    , readConfigProperty("findObject_SubjectBGPSimpleText")
+                    , readConfigProperty("findObject_PredicateBGPSimpleText")
+                    , sparkSession
+                    , readConfigProperty("BGPInputFileTypeSimpleText"));
+        }
+        if ("true".equals(readRunProperty("findSubjectSimpleText"))) {
+            //?s p1 o1
+            FindBGPSimpleText.findSubject(readConfigProperty("findSubject_FileBGPSimpleText")
+                    , readConfigProperty("findSubject_PredicateBGPSimpleText")
+                    , readConfigProperty("findSubject_ObjectBGPSimpleText")
+                    , sparkSession
+                    , readConfigProperty("BGPInputFileTypeSimpleText"));
+        }
+
+        if ("true".equals(readRunProperty("findPredicateSimpleText"))) {
+            //?s p1 o1
+            FindBGPSimpleText.findpredicate(readConfigProperty("findPredicate_FileBGPSimpleText")
+                    , readConfigProperty("findPredicate_SubjectBGPSimpleText")
+                    , readConfigProperty("findPredicate_ObjectBGPSimpleText")
+                    , sparkSession
+                    , readConfigProperty("BGPInputFileTypeSimpleText"));
+        }
+
+        if ("true".equals(readRunProperty("findSubjectObjectBGPSimpleText"))) {
+
+            //?s p1 ?o
+            FindBGPSimpleText.findSubjectObject(readConfigProperty("findSubjectObject_FileBGPSimpleText")
+                    , readConfigProperty("findSubjectObject_PredicateBGPSimpleText")
+                    , sparkSession
+                    , readConfigProperty("BGPInputFileTypeSimpleText"));
+        }
+
+        if ("true".equals(readRunProperty("findSubjectPredicateBGPSimpleText"))) {
+
+            //?s p1 ?o
+            FindBGPSimpleText.findSubjectPredicate(readConfigProperty("findSubjectPredicate_FileBGPSimpleText")
+                    , readConfigProperty("findSubjectPredicate_ObjectBGPSimpleText")
+                    , sparkSession
+                    , readConfigProperty("BGPInputFileTypeSimpleText"));
+        }
+
+        if ("true".equals(readRunProperty("findPredicateObjectBGPSimpleText"))) {
+
+            //?s p1 ?o
+            FindBGPSimpleText.findPredicateObject(readConfigProperty("findPredicateObject_FileBGPSimpleText")
+                    , readConfigProperty("findPredicateObject_SubjectBGPSimpleText")
+                    , sparkSession
+                    , readConfigProperty("BGPInputFileTypeSimpleText"));
+        }
+        // end of BGP with Simple Text -----------------------------------------------------
 
         //Joins with Vertical Partitioning
         if ("true".equals(readRunProperty("findSubjectSubjectJoin"))) {
