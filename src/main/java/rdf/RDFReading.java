@@ -43,7 +43,7 @@ public class RDFReading {
         }
 
 
-        //Basic Graph Patterns with VP
+        //Basic Graph Patterns with VP (parquet and csv)
         if ("true".equals(readRunProperty("findObject"))) {
             //s1 p1 ?o
             FindBasicGraphPatterns.findObject(readConfigProperty("findObject_ObjectBGP")
