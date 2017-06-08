@@ -30,10 +30,12 @@ public class RdfTrasformation {
         //Είναι το αρχείο το οποίο θέλεμε να εξετάσουμε
         FileInputStream is = new FileInputStream(readConfigProperty("dataset"));
 
+
         //Χρησιμοποιούμε έναν κατάλληλο Parser
         //https://github.com/nxparser/nxparser
         NxParser nxp = new NxParser();
         nxp.parse(is);
+        System.out.println("Doc Lines---->"+nxp.lineNumber());
 
         //Είναι η λίστα με τα DataType
         List<DataType> list = new ArrayList<>();
@@ -41,6 +43,7 @@ public class RdfTrasformation {
         List<String> tableList = new ArrayList<>();
 
         for (Node[] nx : nxp) {
+//            System.out.println("Doc Lines---->"+nxp.lineNumber());
             DataType data = new DataType();
             data.setSubject(nx[0].toString());
             data.setTable(nx[1].toString());
@@ -50,6 +53,7 @@ public class RdfTrasformation {
 
 
             tableList.add(nx[1].toString());
+            System.out.println("List Rows--->"+tableList.size());
         }
         System.out.println("Dataset size:"+list.size());
 

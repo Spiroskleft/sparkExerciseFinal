@@ -57,12 +57,12 @@ private static InputStream inputRun = null;
 
     public static void propertieFileRead() throws FileNotFoundException {
 
-        inputConfig = new FileInputStream("/usr/lib/spark/conf/appConf/config.properties");
+        inputConfig = new FileInputStream("/home/tsotzo/Desktop/Conf/config.properties");
         if (inputConfig==null) {
             inputConfig = ReadPropertiesFile.class.getClassLoader().getResourceAsStream("config.properties");
             System.out.println("-----------------------Not Found config.properties Locally----------------");
         }
-        inputRun = new FileInputStream("/usr/lib/spark/conf/appConf/run.properties");
+        inputRun = new FileInputStream("/home/tsotzo/Desktop/Conf/run.properties");
         if (inputRun==null) {
             inputRun = ReadPropertiesFile.class.getClassLoader().getResourceAsStream("run.properties");
             System.out.println("-----------------------Not Found run.properties Locally----------------");
