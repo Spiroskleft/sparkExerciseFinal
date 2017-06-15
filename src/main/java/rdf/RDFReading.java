@@ -35,9 +35,9 @@ public class RDFReading {
             RdfTrasformation.parceTxtToVP();
         }
 
-        if ("true".equals(readRunProperty("parceTxtToCSV"))) {
+//        if ("true".equals(readRunProperty("parceTxtToCSV"))) {
             RdfTrasformation.parceTxtToCSV();
-        }
+//        }
 
 
         if ("true".equals(readRunProperty("tranformCSVtoParquet"))) {
