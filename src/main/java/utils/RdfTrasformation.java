@@ -70,7 +70,6 @@ public class RdfTrasformation {
             dictionaryMap.put(t.get(i), i);
         }
 
-
         //Διατρέχω την λίστα μου για να φτιάξω τα αρχεία.
         //Η λογική είναι ότι θα διατρέχω την λίστα μου και κάθε φορά θα κοιτάω με το map άμα υπάρχει
         //το το όνομα του αρχειου .Άμα δεν υπάρχει θα το δημιουργώ και θα βάζω μέσα σε αυτό τα στοιχεία που θέλω.
@@ -113,6 +112,12 @@ public class RdfTrasformation {
 
     }
 
+
+    /**
+     * Μετατράπει αρχεία plain Text σε CSV
+     * Θα πρέπει να γίνουν οι ρυθμήσεις των φακέλων στο config.properties
+     * @throws IOException
+     */
     public static void  parceTxtToCSV() throws IOException {
 
         //Είναι το αρχείο το οποίο θέλεμε να εξετάσουμε
@@ -141,56 +146,16 @@ public class RdfTrasformation {
         }
         System.out.println("Dataset size:"+list.size());
 
-//        //Βάζω τα table name σε ένα Set για να κόψω τα διπλότυπα
-//        Set<String> tableSet = new HashSet<String>(tableList);
-//        System.out.println("Unique table count: " + tableSet.size());
-
-//        //Φτιάχνω και ενα map το οποίο θα ειναι to dictionary για να μπορώ να κάνω τα αρχεία με νούμερα
-//        Map<String, Integer> dictionaryMap = new HashMap<>();
-//
-//        //Ειναι τα map για να ελέγχω τί έχω γράψει
-//        Map<String, String> tableMap = new HashMap<>();
-
-//        //Γεμίζω το MAP
-//        List<String> t = new ArrayList<>(tableSet);
-//        for (int i = 0; i < tableSet.size(); i++) {
-//            tableMap.put(t.get(i), null);
-//            dictionaryMap.put(t.get(i), i);
-//        }
-
-
-        //Διατρέχω την λίστα μου για να φτιάξω τα αρχεία.
-        //Η λογική είναι ότι θα διατρέχω την λίστα μου και κάθε φορά θα κοιτάω με το map άμα υπάρχει
-        //το το όνομα του αρχειου .Άμα δεν υπάρχει θα το δημιουργώ και θα βάζω μέσα σε αυτό τα στοιχεία που θέλω.
-        //Άμα υπάρχει απλά θα το κάνω append.
 
         //Εδώ ειναι η list κανονικα
         for (int i = 0; i < list.size(); i++) {
             String fileName = is.toString();
-//            //Αν στο map το όνομα του αρχείο ειναι κενο
-//            if (tableMap.get(list.get(i).getTable()) == null) {
-//
-//                //Βάζω σαν όνομα του αρχείου απο το Dictionary
-//                fileName = String.valueOf((dictionaryMap.get(list.get(i).getTable())));
-//
-//                //Ενημερώνω το tableMap
-//                tableMap.put(list.get(i).getTable(), fileName);
-//            } else {
-//                fileName = String.valueOf((dictionaryMap.get(list.get(i).getTable())));
-//            }
-
             String content = list.get(i).getSubject() + "," + list.get(i).getTable() + "," + list.get(i).getObject() + "\n";
 
             //Γράφω σε αρχείο τα αποτελέσματα
             writeInFile(readConfigProperty("outputPath"), content, fileName, readConfigProperty("filesTypes"));
 
         }
-//        //Γράφουμε το Map που είναι το Dictionary σε αρχείο
-//        try {
-//            writeHashMapToCsv(dictionaryMap);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
 
         System.out.println("Done");
 
@@ -198,7 +163,6 @@ public class RdfTrasformation {
         if(Boolean.valueOf(readConfigProperty("writeDataToHDFS"))) {
             HdfsWriter.writeToHDFS(readConfigProperty("inputHDFSpath"), readConfigProperty("outputHDFSpath"));
         }
-
     }
 
 
