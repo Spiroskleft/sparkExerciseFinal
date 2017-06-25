@@ -6,6 +6,7 @@ import org.apache.spark.sql.SparkSession;
 //
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Objects;
 
 import static utils.ReadPropertiesFile.readConfigProperty;
@@ -29,7 +30,7 @@ private static String outputQueries ="";
      */
     public static void findSubject(String object, String predicate, SparkSession sparkSession, String type) throws IOException {
         Dataset<Row> df = null;
-
+        System.out.println("-----------------1->"+new Date());
        if (Objects.equals(type, "csv")) {
            //The predicate will tell us the file that we must take
            //Φορτώνουμε το αρχειο σε ένα Dataset
@@ -38,20 +39,25 @@ private static String outputQueries ="";
        else if (Objects.equals(type, "parquet")) {
            //The predicate will tell us the file that we must take
            //Φορτώνουμε το αρχειο σε ένα Dataset
-           df= sparkSession.read().parquet(readConfigProperty("RDFDataInputPath" + predicate + ".parquet"));
+//           df= sparkSession.read().parquet(readConfigProperty("RDFDataInputPath" + predicate + ".parquet"));
+           df= sparkSession.read().parquet("hdfs://NameNode:8020/test/plainText/ntriples");
+//           df.registerTempTable("MY_TABLE");
        }
        else {
            System.out.println("Wrong file type, Select 'csv' or 'parquet' as a parameter");
 
        }
         df.createOrReplaceTempView("tableName");
-        //Κάνουμε προβολή των δεδομένων
-        sparkSession.sql("SELECT _c0 as subject " +
-                "FROM tableName " +
-                "where _c1='" + object + "'").show();
-
+        System.out.println(df.count());
+        System.out.println("-----------------2->"+new Date());
+        System.in.read();
+//        //Κάνουμε προβολή των δεδομένων
+//        sparkSession.sql("SELECT _c0 as subject " +
+//                "FROM tableName " +
+//                "where _c1='<http://schema.org/eligibleQuantity>'").show();
+//        System.out.println("-----------------3->"+new Date());
         // Γράφουμε το query σε output file που έχουμε καθορίσει στο config.properties
-        df.write().text(readConfigProperty("outputBGP"));
+//        df.write().text(readConfigProperty("outputBGP"));
     }
 
 

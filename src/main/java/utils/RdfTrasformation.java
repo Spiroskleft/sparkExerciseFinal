@@ -190,24 +190,24 @@ public class RdfTrasformation {
 
         FileSystem fs = FileSystem.get(myConf);
         FileStatus afs[] = fs.listStatus(new Path(outputParquetPath+predicate1));
-        for (FileStatus aFile : afs) {
-//            if (aFile.isDir()) {
-//                fs.delete(aFile.getPath(), true);
-//                // delete all directories and sub-directories (if any) in the output directory
-//            } else {
-            //Σβήνουμε το _SUCCESS αρχείο
-                if (aFile.getPath().getName().contains("_SUCCESS")) {
-                    System.out.println("-------------------delete----------------------------");
-                    fs.delete(aFile.getPath(), true);
-                }
-                    // Μετονομάσουμε το αρχείο part-00000... σε δικό μας όνομα
-                else if ((aFile.getPath().getName().contains("part-00000"))) {
-                    System.out.println("-------------------rename----------------------------");
-                    fs.rename(aFile.getPath(), new Path(outputParquetPath+predicate1 +"/"+predicate1 + ".parquet"));
-                }else
-                    System.out.println("------------------Nothing---------------");
-
-            }
+//        for (FileStatus aFile : afs) {
+////            if (aFile.isDir()) {
+////                fs.delete(aFile.getPath(), true);
+////                // delete all directories and sub-directories (if any) in the output directory
+////            } else {
+//            //Σβήνουμε το _SUCCESS αρχείο
+//                if (aFile.getPath().getName().contains("_SUCCESS")) {
+//                    System.out.println("-------------------delete----------------------------");
+//                    fs.delete(aFile.getPath(), true);
+//                }
+//                    // Μετονομάσουμε το αρχείο part-00000... σε δικό μας όνομα
+//                else if ((aFile.getPath().getName().contains("part-00000"))) {
+//                    System.out.println("-------------------rename----------------------------");
+//                    fs.rename(aFile.getPath(), new Path(outputParquetPath+predicate1 +"/"+predicate1 + ".parquet"));
+//                }else
+//                    System.out.println("------------------Nothing---------------");
+//
+//            }
 
 
 //        Dataset<Row> sqlDF =sparkSession.sql("SELECT * FROM parquet.`"+outputParquetPath+predicate1+"/"+predicate1 + ".parquet"+"`");
